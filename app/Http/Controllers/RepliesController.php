@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Thread;
+use Illuminate\Support\Facades\Auth;
 
 class RepliesController extends Controller
 {
@@ -15,7 +16,7 @@ class RepliesController extends Controller
     {
         $thread->addReply([
             'body' => request('body'),
-            'user_id' => auth()->id
+            'user_id' => Auth::id()
         ]);
 
         return back();
