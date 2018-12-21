@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\WithFaker;
@@ -19,15 +20,13 @@ class ThreadsTest extends TestCase
 
     public function test_a_user_can_browse_threads()
     {
-
         $response = $this->get('/threads');
         $response->assertSee($this->thread->title);
     }
 
     public function test_a_user_can_browse_current_thread()
     {
-        $thread = factory('App\Thread')->create();
-        $response = $this->get('/threads/' .$this->thread->id);
+        $response = $this->get($this->thread->path());
         $response->assertSee($this->thread->title);
     }
 
@@ -35,7 +34,7 @@ class ThreadsTest extends TestCase
     {
         $reply = factory('App\Reply')->create(['thread_id' => $this->thread->id]);
 
-        $this->get('/threads/' . $this->thread->id)
+        $this->get($this->thread->path())
             ->assertSee($reply->body);
     }
 
