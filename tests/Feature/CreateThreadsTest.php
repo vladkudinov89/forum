@@ -1,4 +1,5 @@
 <?php
+
 namespace Tests\Feature;
 
 use Illuminate\Auth\AuthenticationException;
@@ -31,16 +32,11 @@ class CreateThreadsTest extends TestCase
 
         $thread = create('App\Thread');
 
-//        $response =
-            $this
+        $this
             ->post('threads', $thread->toArray());
-//        $this->assertResponseOk();
-//        dd($response->getStatusCode());
-//        $this->assertEquals(200, $response->getStatusCode());
-//        dd($response->headers->get('Location'));
-//        dd($thread->path());
-            $this->get($thread->path())
-                ->assertSee($thread->title)
-                ->assertSee($thread->body);
+
+        $this->get($thread->path())
+            ->assertSee($thread->title)
+            ->assertSee($thread->body);
     }
 }
