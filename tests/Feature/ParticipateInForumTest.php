@@ -17,18 +17,20 @@ class ParticipateInForumTest extends TestCase
             ->expectException(AuthenticationException::class);
 
         $this
-            ->post('/threads/1/replies', []);
+            ->post('/threads/channel/1/replies', []);
     }
 
     public function test_can_auth_user_participate_threads()
     {
-        $user = factory('App\User')->create();
+        $user = create('App\User');
 
-        $thread = factory('App\Thread')->create();
+        $thread = create('App\Thread');
 
-        $reply = factory('App\Reply')->create([
-            'thread_id' => $thread->id
-        ]);
+        $reply = create('App\Reply',
+            [
+                'thread_id' => $thread->id
+            ]
+        );
 
         $this
             ->actingAs($user)
