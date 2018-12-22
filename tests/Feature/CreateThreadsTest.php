@@ -1,16 +1,19 @@
 <?php
+
 namespace Tests\Feature;
 
+use App\Thread;
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 
+use Illuminate\Foundation\Testing\WithoutMiddleware;
 use Tests\TestCase;
 
 class CreateThreadsTest extends TestCase
 {
     use DatabaseTransactions;
 
-    public function test_guest_user_ca_create_threads()
+    public function test_guest_user_can_create_threads()
     {
         $this
             ->withoutExceptionHandling()
@@ -29,18 +32,12 @@ class CreateThreadsTest extends TestCase
     {
         $this->sigIn();
 
-        $thread = create('App\Thread');
+        $thread = make(Thread::class);
 
-//        $response =
-            $this
-            ->post('threads', $thread->toArray());
-//        $this->assertResponseOk();
-//        dd($response->getStatusCode());
-//        $this->assertEquals(200, $response->getStatusCode());
-//        dd($response->headers->get('Location'));
-//        dd($thread->path());
-            $this->get($thread->path())
-                ->assertSee($thread->title)
-                ->assertSee($thread->body);
+        $response = $this->post('/threads', $thread->toArray());
+
+        $this->get($response->headers->get('Location'))
+            ->assertSee($thread->title)
+            ->assertSee($thread->body);
     }
 }

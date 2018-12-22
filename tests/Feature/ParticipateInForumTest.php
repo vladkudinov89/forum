@@ -17,7 +17,8 @@ class ParticipateInForumTest extends TestCase
             ->expectException(AuthenticationException::class);
 
         $this
-            ->post('/threads/channel/1/replies', []);
+            ->post('/threads/channel/1/replies', [])
+            ->assertRedirect('/login');
     }
 
     public function test_can_auth_user_participate_threads()
