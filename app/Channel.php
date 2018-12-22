@@ -8,5 +8,14 @@ class Channel extends Model
 {
     protected $table = 'channels';
 
+    public function getRouteKeyName()
+    {
+        return 'slug';
+    }
 
+
+    public function threads()
+    {
+        return $this->hasMany(Thread::class);
+    }
 }
