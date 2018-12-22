@@ -10,6 +10,9 @@ docker-build:
 test:
 	docker-compose exec php-cli vendor/bin/phpunit
 
+autoload:
+	docker-compose exec php-cli composer dump-autoload
+
 assets-install:
 	docker-compose exec node yarn install
 
