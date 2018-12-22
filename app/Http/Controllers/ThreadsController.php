@@ -22,7 +22,6 @@ class ThreadsController extends Controller
     public function index(Channel $channel)
     {
         if ($channel->exists) {
-//            $channelId = Channel::where('slug', $channelSlug)->first()->id;
 
             $threads = $channel->threads()->latest()->get();
 
