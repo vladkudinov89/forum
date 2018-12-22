@@ -24,7 +24,9 @@ class CreateThreadsTest extends TestCase
 
     public function test_guest_cannot_see_create_page()
     {
-        $this->get('/threads/create')
+        $this
+            ->assertGuest($guard = null)
+            ->get('/threads/create')
             ->assertRedirect('/login');
     }
 

@@ -27,7 +27,7 @@ class ParticipateInForumTest extends TestCase
 
         $thread = create('App\Thread');
 
-        $reply = create('App\Reply',
+        $reply = make('App\Reply',
             [
                 'thread_id' => $thread->id
             ]
