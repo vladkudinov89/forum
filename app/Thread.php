@@ -12,17 +12,22 @@ class Thread extends Model
 
     public function replies()
     {
-        return $this->hasMany('App\Reply');
+        return $this->hasMany(Reply::class);
+    }
+
+    public function channel()
+    {
+        return $this->belongsTo(Channel::class);
     }
 
     public function path()
     {
-        return '/threads/' . $this->id;
+        return "/threads/{$this->channel->slug }/{$this->id}";
     }
 
     public function creator()
     {
-        return $this->belongsTo('App\User' , 'user_id');
+        return $this->belongsTo(User::class, 'user_id');
     }
 
     public function addReply($reply)

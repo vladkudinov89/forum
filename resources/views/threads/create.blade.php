@@ -22,6 +22,15 @@
                                 <textarea class="form-control" name="body" id="body" rows="8"></textarea>
                             </div>
 
+                            {{--<div class="form-group">--}}
+                                {{--<label for="body">Slug:</label>--}}
+                                {{--<select name="" id="">--}}
+                                    {{--<option value="">1</option>--}}
+                                    {{--<option value="">2</option>--}}
+                                    {{--<option value="">4</option>--}}
+                                {{--</select>--}}
+                            {{--</div>--}}
+
                             <button type="submit" class="btn btn-primary">Publish</button>
 
                         </form>

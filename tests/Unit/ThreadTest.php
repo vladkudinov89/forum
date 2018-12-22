@@ -1,12 +1,8 @@
 <?php
-
 namespace Tests\Unit;
 
-use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Tests\TestCase;
-use Illuminate\Foundation\Testing\WithFaker;
-use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class ThreadTest extends TestCase
 {
@@ -18,7 +14,7 @@ class ThreadTest extends TestCase
     {
         parent::setUp();
 
-        $this->thread = factory('App\Thread')->create();
+        $this->thread = create('App\Thread');
     }
 
     public function test_a_thread_has_replies()
@@ -31,6 +27,13 @@ class ThreadTest extends TestCase
         $this->assertInstanceOf('App\User' , $this->thread->creator);
     }
 
+    public function test_a_thread_can_make_a_string_paht()
+    {
+        $thread = create('App\Thread');
+
+        $this->assertEquals("/threads/{$thread->channel->slug }/{$thread->id}" , $thread->path());
+    }
+
     public function test_a_thread_can_add_reply()
     {
         $this->thread->addReply([
@@ -39,5 +42,12 @@ class ThreadTest extends TestCase
         ]);
 
         $this->assertCount(1, $this->thread->replies);
+    }
+
+    public function test_a_thread_belong_to_a_channel()
+    {
+        $thread = create('App\Thread');
+
+        $this->assertInstanceOf('App\Channel' , $thread->channel);
     }
 }
