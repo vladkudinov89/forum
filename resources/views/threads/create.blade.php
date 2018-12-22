@@ -11,6 +11,7 @@
                         <form action="/threads" method="POST">
 
                             {{csrf_field()}}
+                            {{--@csrf--}}
 
                             <div class="form-group">
                                 <label for="title">Title:</label>
@@ -22,14 +23,13 @@
                                 <textarea class="form-control" name="body" id="body" rows="8"></textarea>
                             </div>
 
-                            {{--<div class="form-group">--}}
-                                {{--<label for="body">Slug:</label>--}}
-                                {{--<select name="" id="">--}}
-                                    {{--<option value="">1</option>--}}
-                                    {{--<option value="">2</option>--}}
-                                    {{--<option value="">4</option>--}}
-                                {{--</select>--}}
-                            {{--</div>--}}
+                            <div class="form-group">
+                                <select name="channel_id" id="">
+                                    @foreach($channels as $channel)
+                                        <option value='{{ $channel->id }}'>{{ $channel->name }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
 
                             <button type="submit" class="btn btn-primary">Publish</button>
 

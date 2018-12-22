@@ -10,6 +10,10 @@ class Thread extends Model
 
     protected $guarded = [];
 
+    protected $fillable = [
+      'user_id' , 'channel_id' , 'title' , 'body'
+    ];
+
     public function replies()
     {
         return $this->hasMany(Reply::class);

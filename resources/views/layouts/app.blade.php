@@ -34,6 +34,7 @@
                     <!-- Left Side Of Navbar -->
                     <ul class="navbar-nav mr-auto">
                         <a class="nav-link" href="/threads">All Threads</a>
+                        <a class="nav-link" href="/threads/create">Create Threads</a>
                     </ul>
 
                     <!-- Right Side Of Navbar -->
