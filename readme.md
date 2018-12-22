@@ -11,8 +11,9 @@ Install the following packages prior to standing up your development environment
 Set your .env vars and then type:
 ```
 git clone <this_repo>
-cp .env.example .env
 docker-compose up -d
+cp .env.example .env
+docker-compose exec php-cli php artisan key:generate
 docker-compose exec php-cli composer install
 docker-compose exec node yarn install
 docker-compose exec node yarn watch
