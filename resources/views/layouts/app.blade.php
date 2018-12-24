@@ -35,7 +35,21 @@
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <!-- Left Side Of Navbar -->
                 <ul class="navbar-nav mr-auto">
-                    <a class="nav-link" href="/threads">All Threads</a>
+
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown1" role="button"
+                           data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Browse Threads
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="navbarDropdown1">
+                            <a class="dropdown-item" href="/threads">All Threads</a>
+                            @if(auth()->check())
+                                <a class="dropdown-item" href="/threads?by={{auth()->user()->name}}">My Threads</a>
+                            @endif
+                        </div>
+                    </li>
+
+
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -43,7 +57,8 @@
                         </a>
                         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                             @foreach($channels as $channel)
-                                <a class="dropdown-item d-flex flex-row justify-content-between" href="/threads/{{$channel->slug}}">
+                                <a class="dropdown-item d-flex flex-row justify-content-between"
+                                   href="/threads/{{$channel->slug}}">
                                     <span class="pull-left"> {{$channel->name}}</span>
                                     <span class="pull-right">{{count($channel->threads)}}</span>
                                 </a>
