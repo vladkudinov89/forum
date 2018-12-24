@@ -2,17 +2,13 @@
 
 @section('content')
     <div class="container">
-        <div class="row justify-content-center">
+        <div class="row">
             <div class="col-md-8">
+
                 <div class="card">
                     <div class="card-header">Thread</div>
 
                     <div class="card-body">
-                        @if (session('status'))
-                            <div class="alert alert-success" role="alert">
-                                {{ session('status') }}
-                            </div>
-                        @endif
 
                         <article>
                             <a href="#">{{$thread->creator->name}}</a> posted: {{$thread->title}}
@@ -21,29 +17,18 @@
 
                     </div>
                 </div>
-            </div>
-        </div>
 
-        <hr>
-
-        <div class="row justify-content-center">
-            <div class="col-md-8">
                 <div class="card-header">Replies</div>
 
-
-                @foreach($thread->replies as $reply)
+                @foreach($replies as $reply)
                     <div class="mb-3">
                         @include('threads/reply')
                     </div>
                 @endforeach
 
+                {{$replies->links()}}
 
-            </div>
-        </div>
-
-        @if(auth()->check())
-            <div class="row justify-content-center">
-                <div class="col-md-8">
+                @if(auth()->check())
                     <form method="POST" action="{{$thread->path() . '/replies'}} ">
                         {{csrf_field()}}
 
@@ -54,12 +39,29 @@
                         </div>
                         <button type="submit" class="btn btn-info">Post</button>
                     </form>
+                @else
+                    <p class="text-center">Please <a href="{{route('login')}}">sing in</a> to participate in this
+                        discussion.</p>
+                @endif
 
+            </div>
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="card-header">
+
+                            <p>This thread was published {{$thread->created_at->diffForHumans() }}
+                                by <a href="#">{{$thread->creator->name}}</a>
+                                and has {{$thread->replies_count}}
+                                {{str_plural('comment' , $thread->replies_count)}}
+                                .
+                            </p>
+
+                        </div>
+                    </div>
                 </div>
             </div>
-        @else
-            <p class="text-center">Please <a href="{{route('login')}}">sing in</a> to participate in this discussion.</p>
-        @endif
+        </div>
 
     </div>
 @endsection
