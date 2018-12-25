@@ -13,6 +13,12 @@ test:
 autoload:
 	docker-compose exec php-cli composer dump-autoload
 
+fresh:
+	docker-compose exec php-cli php artisan migrate:fresh
+
+seed:
+	docker-compose exec php-cli php artisan migrate:fresh --seed
+
 assets-install:
 	docker-compose exec node yarn install
 
