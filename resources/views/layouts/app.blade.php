@@ -61,7 +61,6 @@
                                 <a class="dropdown-item d-flex flex-row justify-content-between"
                                    href="/threads/{{$channel->slug}}">
                                     <span class="pull-left"> {{$channel->name}}</span>
-                                    <span class="pull-right">{{count($channel->threads)}}</span>
                                 </a>
 
                             @endforeach
