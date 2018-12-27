@@ -2,7 +2,7 @@
 
 <div class="card-header d-flex justify-content-between">
     <div class="">
-        <a href="#">{{$reply->owner->name}}</a> said {{$reply->created_at->diffForHumans()}}
+        <a href="{{route('profile' , $reply->owner->name)}}">{{$reply->owner->name}}</a> said {{$reply->created_at->diffForHumans()}}
     </div>
     <form method="POST" action="/replies/{{$reply->id}}/favorites">
         {{csrf_field()}}

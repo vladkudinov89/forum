@@ -11,7 +11,7 @@
                     <div class="card-body">
 
                         <article>
-                            <a href="#">{{$thread->creator->name}}</a> posted: {{$thread->title}}
+                            <a href="{{route('profile' ,$thread->creator->name)}}">{{$thread->creator->name}}</a> posted: {{$thread->title}}
                             <div class="body">{{$thread->body}}</div>
                         </article>
 
