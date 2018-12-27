@@ -51,7 +51,7 @@
                         <div class="card-header">
 
                             <p>This thread was published {{$thread->created_at->diffForHumans() }}
-                                by <a href="#">{{$thread->creator->name}}</a>
+                                by <a href="{{route('profile' , $thread->creator->name)}}">{{$thread->creator->name}}</a>
                                 and has {{$thread->replies_count}}
                                 {{str_plural('comment' , $thread->replies_count)}}
                                 .
