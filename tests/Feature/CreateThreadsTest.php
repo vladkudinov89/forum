@@ -3,11 +3,11 @@
 namespace Tests\Feature;
 
 use App\Channel;
+use App\Reply;
 use App\Thread;
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 
-use Illuminate\Foundation\Testing\WithoutMiddleware;
 use Tests\TestCase;
 
 class CreateThreadsTest extends TestCase
@@ -58,7 +58,7 @@ class CreateThreadsTest extends TestCase
 
     public function test_a_thread_requieres_a_valid_channel_id()
     {
-        factory(Channel::class , 2)->create();
+        factory(Channel::class, 2)->create();
 
         $this->publishThread(['channel_id' => null])
             ->assertSessionHasErrors('channel_id');
@@ -71,8 +71,37 @@ class CreateThreadsTest extends TestCase
     {
         $this->signIn();
 
-        $thread = make(Thread::class , $overrides);
+        $thread = make(Thread::class, $overrides);
 
-        return $this->post('/threads' , $thread->toArray());
+        return $this->post('/threads', $thread->toArray());
+    }
+
+    public function test_guest_can_delete_test()
+    {
+        $thread = create(Thread::class);
+
+       $response =  $this
+            ->assertGuest($guard = null)
+            ->delete($thread->path());
+
+       $response->assertRedirect('/login');
+
+    }
+
+    public function test_a_thread_can_be_deleted()
+    {
+        $this->signIn();
+
+        $thread = create(Thread::class);
+
+        $reply = create(Reply::class, ['thread_id' => $thread->id]);
+
+        $response = $this->json('DELETE', $thread->path());
+
+        $response->assertStatus(204);
+
+        $this->assertDatabaseMissing('threads', ['id' => $thread->id]);
+        $this->assertDatabaseMissing('replies', ['id' => $reply->id]);
+        $this->assertDatabaseHas('channels', ['id' => $thread->channel->id]);
     }
 }

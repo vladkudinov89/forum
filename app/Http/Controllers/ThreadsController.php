@@ -27,7 +27,7 @@ class ThreadsController extends Controller
     {
         $threads = $this->getThreads($channel, $filters);
 
-        if(request()->wantsJson()){
+        if (request()->wantsJson()) {
             return $threads;
         }
 
@@ -111,9 +111,11 @@ class ThreadsController extends Controller
      * @param  \App\Thread $thread
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Thread $thread)
+    public function destroy($channel , Thread $thread)
     {
-        //
+        $thread->delete();
+
+        return response([] , 204);
     }
 
     /**
