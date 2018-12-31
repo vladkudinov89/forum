@@ -2,9 +2,11 @@
 
 namespace Tests\Feature;
 
+use App\Activity;
 use App\Channel;
 use App\Reply;
 use App\Thread;
+use Carbon\Carbon;
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 
@@ -84,36 +86,37 @@ class CreateThreadsTest extends TestCase
 
         $thread = create(Thread::class);
 
-       $response =  $this
+        $response = $this
             ->assertGuest($guard = null)
             ->delete($thread->path());
 
-       $response->assertRedirect('/login');
+        $response->assertRedirect('/login');
 
-       $this->signIn();
-       $this->delete($thread->path())->assertStatus(403);
+        $this->signIn();
+        $this->delete($thread->path())->assertStatus(403);
 
     }
 
-    public function test_a_thread_can_be_deleted()
+    public function test_auth_user_can_be_deleted_a_thread()
     {
         $this->signIn();
 
         $thread = create(Thread::class, ['user_id' => auth()->id()]);
-//        $thread = create(Thread::class);
 
-//        dd($thread);
-
-        $reply = create(Reply::class, ['thread_id' => $thread->id]);
+        $replies = create(Reply::class, ['thread_id' => $thread->id], 3);
 
         $response = $this->json('DELETE', $thread->path());
 
         $response->assertStatus(204);
 
-///        dd($thread->user_id);
-
         $this->assertDatabaseMissing('threads', ['id' => $thread->id, 'user_id' => $thread->user_id]);
-        $this->assertDatabaseMissing('replies', ['id' => $reply->id]);
+
+        foreach ($replies as $reply) {
+            $this->assertDatabaseMissing('replies', ['id' => $reply->id]);
+        }
+
         $this->assertDatabaseHas('channels', ['id' => $thread->channel->id]);
+
+        $this->assertEquals(0, Activity::where('user_id', auth()->id())->count());
     }
 }
