@@ -16,31 +16,12 @@
             <div class="col-md-8">
 
 
-
-                    @foreach($threads as $thread)
-                    <div class="card mb-4">
-                        <div class="card-header">
-                            {{$profileUser->name}} posted thread: {{$thread->title}}
-                            <span class="float-right">{{$thread->created_at->diffForHumans()}}</span>
-                        </div>
-
-                        <div class="card-body">
-                            <article>
-                                <div class="d-flex justify-content-between">
-                                    <h4>
-                                        <a href="{{$thread->path()}}">{{$thread->title}}</a>
-                                    </h4>
-                                    <a href="{{$thread->path()}}">{{$thread->replies_count}} {{str_plural('reply' , $thread->replies_count)}}</a>
-                                </div>
-
-                                <div class="body">{{$thread->body}}</div>
-
-                            </article>
-                        </div>
-                    </div>
+                @foreach($activites as $date => $activity)
+                    <h3>{{$date}}</h3>
+                    @foreach($activity as $record)
+                        @include("profiles.activities.{$record->type}" , ['activity' => $record])
+                    @endforeach
                 @endforeach
-
-                {{$threads->links()}}
 
             </div>
         </div>

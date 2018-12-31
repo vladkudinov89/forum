@@ -2,26 +2,33 @@
 
 namespace App;
 
+use App\Traits\RecordActivity;
 use Illuminate\Database\Eloquent\Model;
 
 class Thread extends Model
 {
+    use RecordActivity;
+
     protected $table = 'threads';
 
     protected $guarded = [];
 
     protected $fillable = [
-      'user_id' , 'channel_id' , 'title' , 'body'
+        'user_id', 'channel_id', 'title', 'body'
     ];
 
-    protected $with = ['creator' , 'channel'];
+    protected $with = ['creator', 'channel'];
 
     protected static function boot()
     {
         parent::boot();
 
-        static::addGlobalScope('replyCount' , function ($builder){
-           $builder->withCount('replies');
+        static::addGlobalScope('replyCount', function ($builder) {
+            $builder->withCount('replies');
+        });
+
+        static::deleting(function ($thread){
+            $thread->replies->each->delete();
         });
     }
 
@@ -50,7 +57,7 @@ class Thread extends Model
         $this->replies()->create($reply);
     }
 
-    public static function scopeFilter($query , $filters)
+    public static function scopeFilter($query, $filters)
     {
         return $filters->apply($query);
     }
