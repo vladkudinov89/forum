@@ -116,14 +116,6 @@ class ThreadsController extends Controller
     {
         $this->authorize('update' , $thread);
 
-//        if ($thread->user_id != auth()->id()) {
-//            if (request()->wantsJson()) {
-//                abort(403, 'You do not have permission to do this.');
-//            }
-//
-//            return redirect('/login');
-//        }
-
         $thread->delete();
 
         if (request()->wantsJson()) {
