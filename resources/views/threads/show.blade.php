@@ -29,8 +29,7 @@
                     </div>
                 </div>
 
-                <div class="card-header">Replies</div>
-
+                <h3 class="text-center mt-4 mb-4">Replies</h3>
                 @foreach($replies as $reply)
                     <div class="mb-3">
                         @include('threads/reply')
