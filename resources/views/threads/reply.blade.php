@@ -1,6 +1,4 @@
-
-
-<div class="card-header d-flex justify-content-between">
+<div id="reply-{{$reply->id}}" class="card-header d-flex justify-content-between">
     <div class="">
         <a href="{{route('profile' , $reply->owner->name)}}">{{$reply->owner->name}}</a> said {{$reply->created_at->diffForHumans()}}
     </div>
