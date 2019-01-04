@@ -20,7 +20,7 @@ trait RecordActivity
         };
 
         static::deleting(function ($model) {
-            $model->activity()->delete();
+            $model->activity->each->delete();
         });
     }
 

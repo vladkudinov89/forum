@@ -5,9 +5,11 @@
                 <a href="{{route('profile' , $reply->owner->name)}}">{{$reply->owner->name}}</a>
                 said {{$reply->created_at->diffForHumans()}}
             </div>
-            <favorite-component :reply="{{$reply}}">
+            @if(Auth::check())
+                <favorite-component :reply="{{$reply}}">
 
-            </favorite-component>
+                </favorite-component>
+            @endif
         </div>
 
         <div class="card">
