@@ -67,8 +67,6 @@ class ParticipateInForumTest extends TestCase
         $this->signIn()
             ->delete("/replies/{$reply->id}")
             ->assertStatus(403);
-
-
     }
 
     public function test_authorized_users_can_delete_replies()
@@ -81,9 +79,32 @@ class ParticipateInForumTest extends TestCase
             ->assertStatus(302);
 
         $this->assertDatabaseMissing('replies' , ['id' => $reply->id]);
-        $this->assertDatabaseHas('activities' , ['subject_id' => $reply->id]);
+        // $this->assertDatabaseHas('activities' , ['subject_id' => $reply->id]);
+    }
 
+    public function test_auth_user_can_update_replies()
+    {
+        $this->signIn();
 
+        $reply = create(Reply::class , ['user_id' => auth()->id()]);
+
+        $str = 'You been changed, fool.';
+
+        $this->patch('/replies/' . $reply->id , ['body' => $str]);
+
+        $this->assertDatabaseHas('replies' , ['id' => $reply->id , 'body' => $str]);
+    }
+
+    public function test_unauthorized_users_cannot_update_replies()
+    {
+        $reply = create(Reply::class);
+
+        $this->patch("/replies/{$reply->id}")
+            ->assertRedirect('login');
+
+        $this->signIn()
+            ->patch("/replies/{$reply->id}")
+            ->assertStatus(403);
     }
 }
   

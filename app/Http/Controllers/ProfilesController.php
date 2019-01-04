@@ -13,7 +13,6 @@ class ProfilesController extends Controller
 //        $this->middleware('auth');
 //    }
 
-
     public function show(User $user)
     {
         return view('profiles.show' , [

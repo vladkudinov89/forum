@@ -33,12 +33,20 @@ class RepliesController extends Controller
             ->with('flash' , 'Your reply has been left.');
     }
 
+    public function update(Reply $reply)
+    {
+        $this->authorize('update' , $reply);
+
+        $reply->update(request(['body']));
+    }
+
     public function destroy(Reply $reply)
     {
         $this->authorize('update' , $reply);
 
         $reply->delete();
 
-        return back();
+        return back()
+            ->with('flash' , 'You delete reply.');
     }
 }
