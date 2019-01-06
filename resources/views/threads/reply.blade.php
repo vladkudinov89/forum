@@ -1,4 +1,4 @@
-<reply-component :attributes="{{$reply}}" inline-template v-cloak>
+{{-- <reply-component :data="{{$reply}}" inline-template v-cloak>
     <div>
         <div id="reply-{{$reply->id}}" class="card-header d-flex justify-content-between">
             <div class="">
@@ -41,4 +41,4 @@
             @endcan
         </div>
     </div>
-</reply-component>
+</reply-component> --}}

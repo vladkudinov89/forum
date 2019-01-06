@@ -1,6 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
+<thread-view inline-template :initial-replies-count="{{$thread->replies_count}}">
     <div class="container">
         <div class="row">
             <div class="col-md-8">
@@ -11,11 +12,11 @@
                             <a href="{{route('profile' ,$thread->creator->name)}}">{{$thread->creator->name}}</a> posted: {{$thread->title}}
                         </span>
                         @can('update' , $thread)
-                            <form action="{{$thread->path()}}" method="post">
-                                {{csrf_field()}}
-                                {{method_field('DELETE')}}
-                                <button type="submit" class="btn btn-danger">Delete Thread</button>
-                            </form>
+                        <form action="{{$thread->path()}}" method="post">
+                            {{csrf_field()}}
+                            {{method_field('DELETE')}}
+                            <button type="submit" class="btn btn-danger">Delete Thread</button>
+                        </form>
                         @endcan
                     </div>
 
@@ -30,28 +31,24 @@
                 </div>
 
                 <h3 class="text-center mt-4 mb-4">Replies</h3>
-                @foreach($replies as $reply)
-                    <div class="mb-3">
-                        @include('threads/reply')
-                    </div>
-                @endforeach
-
-                {{$replies->links()}}
+                <replies-component :data-replies="{{$thread->replies}}"
+                    @removed="repliesCount--"
+                    ></replies-component>
 
                 @if(auth()->check())
-                    <form method="POST" action="{{$thread->path() . '/replies'}} ">
-                        {{csrf_field()}}
+                <form method="POST" action="{{$thread->path() . '/replies'}} ">
+                    {{csrf_field()}}
 
-                        <div class="form-group">
+                    <div class="form-group">
                         <textarea name="body" id="body" class="form-control"
-                                  placeholder="Have something to say?"
-                                  rows="5"></textarea>
-                        </div>
-                        <button type="submit" class="btn btn-info">Post</button>
-                    </form>
+                        placeholder="Have something to say?"
+                        rows="5"></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-info">Post</button>
+                </form>
                 @else
-                    <p class="text-center">Please <a href="{{route('login')}}">sing in</a> to participate in this
-                        discussion.</p>
+                <p class="text-center">Please <a href="{{route('login')}}">sing in</a> to participate in this
+                discussion.</p>
                 @endif
 
             </div>
@@ -63,7 +60,8 @@
                             <p>This thread was published {{$thread->created_at->diffForHumans() }}
                                 by
                                 <a href="{{route('profile' , $thread->creator->name)}}">{{$thread->creator->name}}</a>
-                                and has {{$thread->replies_count}}
+                                and has 
+                                <span v-text="repliesCount"></span>
                                 {{str_plural('comment' , $thread->replies_count)}}
                                 .
                             </p>
@@ -75,4 +73,5 @@
         </div>
 
     </div>
+</thread-view>
 @endsection

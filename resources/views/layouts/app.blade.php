@@ -10,28 +10,36 @@
     <title>{{ config('app.name', 'Laravel') }}</title>
 
     <!-- Scripts -->
+    <script>
+        window.App = {!! json_encode([
+            'csrfToken' => csrf_token(),
+            'user' => Auth::user(),
+            'signedIn' => Auth::check()
+        ])  
+        !!}
+    </script>
     <script src="{{ asset('js/app.js') }}" defer></script>
 
     <!-- Fonts -->
-    <link rel="dns-prefetch" href="//fonts.gstatic.com">
-    <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet" type="text/css">
+    {{-- <link rel="dns-prefetch" href="//fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet" type="text/css"> --}}
 
     <!-- Styles -->
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
 
     <style>
-        [v-cloak]{
-            display: none;
-        }
-    </style>
+    [v-cloak]{
+        display: none;
+    }
+</style>
 </head>
 <body>
-<div id="app">
-    @include('layouts.nav')
-    <main class="py-4">
-        @yield('content')
-    </main>
-    <flash-component message="{{session('flash')}}"></flash-component>
-</div>
+    <div id="app">
+        @include('layouts.nav')
+        <main class="py-4">
+            @yield('content')
+        </main>
+        <flash-component message="{{session('flash')}}"></flash-component>
+    </div>
 </body>
 </html>
