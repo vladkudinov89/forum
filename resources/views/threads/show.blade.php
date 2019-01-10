@@ -33,23 +33,8 @@
                 <h3 class="text-center mt-4 mb-4">Replies</h3>
                 <replies-component :data-replies="{{$thread->replies}}"
                     @removed="repliesCount--"
+                                   @added="repliesCount++"
                     ></replies-component>
-
-                @if(auth()->check())
-                <form method="POST" action="{{$thread->path() . '/replies'}} ">
-                    {{csrf_field()}}
-
-                    <div class="form-group">
-                        <textarea name="body" id="body" class="form-control"
-                        placeholder="Have something to say?"
-                        rows="5"></textarea>
-                    </div>
-                    <button type="submit" class="btn btn-info">Post</button>
-                </form>
-                @else
-                <p class="text-center">Please <a href="{{route('login')}}">sing in</a> to participate in this
-                discussion.</p>
-                @endif
 
             </div>
             <div class="col-md-4">
