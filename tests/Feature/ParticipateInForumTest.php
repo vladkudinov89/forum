@@ -40,8 +40,7 @@ class ParticipateInForumTest extends TestCase
             ->assertAuthenticatedAs($user, $guard = null)
             ->post($thread->path() . '/replies', $reply->toArray());
 
-        $this->get($thread->path())
-            ->assertSee($reply->body);
+        $this->assertDatabaseHas('replies', ['body' => $reply->body]);
 
     }
 
@@ -73,12 +72,12 @@ class ParticipateInForumTest extends TestCase
     {
         $this->signIn();
 
-        $reply = create(Reply::class , ['user_id' => auth()->id()]);
+        $reply = create(Reply::class, ['user_id' => auth()->id()]);
 
         $this->delete("/replies/{$reply->id}")
             ->assertStatus(302);
 
-        $this->assertDatabaseMissing('replies' , ['id' => $reply->id]);
+        $this->assertDatabaseMissing('replies', ['id' => $reply->id]);
         // $this->assertDatabaseHas('activities' , ['subject_id' => $reply->id]);
     }
 
@@ -86,13 +85,13 @@ class ParticipateInForumTest extends TestCase
     {
         $this->signIn();
 
-        $reply = create(Reply::class , ['user_id' => auth()->id()]);
+        $reply = create(Reply::class, ['user_id' => auth()->id()]);
 
         $str = 'You been changed, fool.';
 
-        $this->patch('/replies/' . $reply->id , ['body' => $str]);
+        $this->patch('/replies/' . $reply->id, ['body' => $str]);
 
-        $this->assertDatabaseHas('replies' , ['id' => $reply->id , 'body' => $str]);
+        $this->assertDatabaseHas('replies', ['id' => $reply->id, 'body' => $str]);
     }
 
     public function test_unauthorized_users_cannot_update_replies()
