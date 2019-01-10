@@ -7,7 +7,9 @@
             </reply-component>
         </div>
 
-        <add-reply-component :endpoint="endpoint" @created="add"></add-reply-component>
+        <paginator-component :dataSet="dataSet" @changed="fetch"></paginator-component>
+
+        <add-reply-component @created="add"></add-reply-component>
     </div>
 
 </template>
@@ -15,29 +17,44 @@
 <script>
     import ReplyComponent from './ReplyComponent.vue';
     import AddReplyComponent from "./AddReplyComponent";
+    import collection from '../mixins/collection';
 
     export default {
 
         name: 'RepliesComponent',
+
         components: {AddReplyComponent, ReplyComponent},
-        props: ['dataReplies'],
+
+        mixins: [collection],
+
         data() {
             return {
-                items: this.dataReplies,
-                endpoint: location.pathname + '/replies'
+                dataSet: false
             }
         },
+        created() {
+            this.fetch();
+        },
         methods: {
-            add(reply) {
-                this.items.push(reply);
-                this.$emit('added');
+            fetch(page) {
+                axios.get(this.url(page))
+                    .then(this.refresh);
             },
-            remove(index) {
-                this.items.splice(index, 1);
+            url(page) {
+                if (! page)
+                {
+                    let query = location.search.match(/page=(\d+)/);
 
-                this.$emit('removed');
+                    page = query ? query[1] : 1;
+                }
 
-                flash('Reply was deleted!');
+                return `${location.pathname}/replies?page=${page}`;
+            },
+            refresh({data}) {
+                this.dataSet = data;
+                this.items = data.data;
+
+                window.scrollTo(0,0);
             }
         },
     }

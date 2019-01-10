@@ -31,7 +31,7 @@
                 </div>
 
                 <h3 class="text-center mt-4 mb-4">Replies</h3>
-                <replies-component :data-replies="{{$thread->replies}}"
+                <replies-component
                     @removed="repliesCount--"
                                    @added="repliesCount++"
                     ></replies-component>

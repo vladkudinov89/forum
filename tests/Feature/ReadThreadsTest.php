@@ -3,6 +3,7 @@
 namespace Tests\Feature;
 
 use App\Channel;
+use App\Reply;
 use App\Thread;
 use App\User;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
@@ -37,8 +38,7 @@ class ReadThreadsTest extends TestCase
     {
         $reply = create('App\Reply', ['thread_id' => $this->thread->id]);
 
-        $this->get($this->thread->path())
-            ->assertSee($reply->body);
+        $this->assertDatabaseHas('replies' , ['body' => $reply->body]);
     }
 
     public function test_a_user_can_filter_threads_according_to_a_channel()
@@ -65,6 +65,19 @@ class ReadThreadsTest extends TestCase
         $this->get('threads?by=JohnDoe')
             ->assertSee($threadByJohn->title)
             ->assertDontSee($threadNotByJohn->title);
+    }
+
+    public function test_can_user_get_all_replies_for_a_given_thread()
+    {
+        $thread = create(Thread::class);
+
+        create(Reply::class , ['thread_id' =>$thread->id] , 2);
+
+        $response = $this->getJson($thread->path() . '/replies')->json();
+
+        $this->assertCount(2 , $response['data']);
+        $this->assertEquals(2 , $response['total']);
+
     }
 
 }

@@ -66,7 +66,7 @@ class ThreadsController extends Controller
         ]);
 
         return redirect($thread->path())
-            ->with('flash' , 'Your thread has been puslished!');
+            ->with('flash', 'Your thread has been puslished!');
     }
 
     /**
@@ -77,10 +77,7 @@ class ThreadsController extends Controller
      */
     public function show($channeId, Thread $thread)
     {
-        return view('threads.show', [
-            'thread' => $thread,
-            'replies' => $thread->replies()->paginate(3)
-        ]);
+        return view('threads.show', compact('thread'));
     }
 
     /**
@@ -114,7 +111,7 @@ class ThreadsController extends Controller
      */
     public function destroy($channel, Thread $thread)
     {
-        $this->authorize('update' , $thread);
+        $this->authorize('update', $thread);
 
         $thread->delete();
 
