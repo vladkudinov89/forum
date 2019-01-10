@@ -80,4 +80,15 @@ class ReadThreadsTest extends TestCase
 
     }
 
+    public function test_a_user_can_filter_a_threads_by_those_that_are_unanswered()
+    {
+        $thread = create(Thread::class);
+
+        create(Reply::class , ['thread_id' => $thread->id]);
+
+        $response = $this->getJson('threads?unanswered=1')->json();
+
+        $this->assertEquals(0 , end($response)['replies_count']);
+    }
+
 }

@@ -42,6 +42,8 @@ class ParticipateInForumTest extends TestCase
 
         $this->assertDatabaseHas('replies', ['body' => $reply->body]);
 
+        $this->assertEquals(1, $thread->fresh()->replies_count);
+
     }
 
     public function test_a_reply_required_body()
@@ -78,7 +80,8 @@ class ParticipateInForumTest extends TestCase
             ->assertStatus(302);
 
         $this->assertDatabaseMissing('replies', ['id' => $reply->id]);
-        // $this->assertDatabaseHas('activities' , ['subject_id' => $reply->id]);
+
+        $this->assertEquals(0 , $reply->thread->fresh()->replies_count);
     }
 
     public function test_auth_user_can_update_replies()
