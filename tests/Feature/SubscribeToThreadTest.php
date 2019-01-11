@@ -19,4 +19,36 @@ class SubscribeToThreadTest extends TestCase
 
         $this->assertCount(1 , $thread->subscriptions);
     }
+
+    public function test_knows_if_auth_user_is_subscribe_in_thread()
+    {
+        $this->signIn();
+
+        $thread = create(Thread::class);
+
+        $this->assertFalse($thread->isSubscribedTo);
+
+        $thread->subscribe();
+
+        $this->assertTrue($thread->isSubscribedTo);
+    }
+
+    public function test_a_auth_user_can_delete_subscribed_thread()
+    {
+        $this->signIn();
+
+        $thread = create(Thread::class);
+
+        $thread->subscribe();
+
+        $this->assertTrue($thread->isSubscribedTo);
+
+        $this->delete($thread->path() . '/subscriptions');
+
+//        $thread->unsubscribe();
+//
+//        $this->assertFalse($thread->isSubscribedTo);
+
+        $this->assertCount(0 , $thread->subscriptions);
+    }
 }

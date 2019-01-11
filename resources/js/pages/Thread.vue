@@ -3,11 +3,12 @@
 
 <script>
 import RepliesComponent from '../components/RepliesComponent.vue';
+import SubscribeButtonComponent from '../components/SubscribeButtonComponent';
 
 export default {
 	
   name: 'Thread',
-  components: {RepliesComponent},
+  components: {RepliesComponent , SubscribeButtonComponent},
   props : ['initialRepliesCount'],
 
   data () {

@@ -51,6 +51,10 @@
                                 .
                             </p>
 
+                            <p>
+                                <subscribe-button-component :active="{{$thread->isSubscribedTo ? 'true' : 'false'}}"></subscribe-button-component>
+                            </p>
+
                         </div>
                     </div>
                 </div>
