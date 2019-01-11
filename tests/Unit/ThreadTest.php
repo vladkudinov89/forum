@@ -22,11 +22,11 @@ class ThreadTest extends TestCase
     public function test_a_thread_has_replies()
     {
        $this->assertInstanceOf('Illuminate\Database\Eloquent\Collection', $this->thread->replies);
-    }
+   }
 
-    public function test_thread_has_creator()
-    {
-        $this->assertInstanceOf('App\User' , $this->thread->creator);
+   public function test_thread_has_creator()
+   {
+    $this->assertInstanceOf('App\User' , $this->thread->creator);
     }
 
     public function test_a_thread_can_make_a_string_paht()
@@ -60,4 +60,43 @@ class ThreadTest extends TestCase
         $this->assertInstanceOf(Channel::class , $thread->channel);
 
     }
+
+    public function test_can_add_subscribe_thread()
+    {
+        $thread = create(Thread::class);
+
+        $thread->subscribe($userId = 1);
+
+        $this->assertEquals(
+            1,
+            $thread->subscriptions()->where('user_id' ,$userId)->count()    
+        );
+
+            $subsInDB = $thread->subscriptions;
+            
+         $this->assertEquals($thread->id , $subsInDB[0]->thread_id);
+
+         $this->assertEquals($userId , $subsInDB[0]->user_id);
+
+         $this->assertDatabaseHas('thread_subscribes', ['thread_id' => $subsInDB[0]->thread_id]);
+
+         $this->assertDatabaseHas('thread_subscribes', ['user_id' => $subsInDB[0]->user_id]);
+    }
+
+    public function test_can_unsubscribe_thread()
+    {
+        $thread = create(Thread::class);
+
+        $thread->unsubscribe($userId = 1);
+
+        $this->assertEquals(
+            0,
+            $thread->subscriptions()->where('user_id' ,$userId)->count()    
+        );
+
+         $this->assertDatabaseMissing('thread_subscribes', ['thread_id' => $thread->id]);
+         
+         $this->assertDatabaseMissing('thread_subscribes', ['user_id' => $userId]);
+    }
+
 }
