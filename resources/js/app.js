@@ -37,6 +37,7 @@ Vue.component('example-component', require('./components/ExampleComponent.vue').
 Vue.component('flash-component', require('./components/FlashComponent.vue').default);
 Vue.component('thread-view', require('./pages/Thread.vue').default);
 
+Vue.component('user-notifications-component', require('./components/UserNotificationsComponent.vue').default);
 Vue.component('favorite-component', require('./components/FavoriteComponent.vue').default);
 Vue.component('paginator-component', require('./components/PaginatorComponent.vue').default);
 

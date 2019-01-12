@@ -87,7 +87,7 @@ class ThreadTest extends TestCase
     {
         $thread = create(Thread::class);
 
-        $thread->unsubscribe($userId = 1);
+        $thread->unsubscribe($userId = 999);
 
         $this->assertEquals(
             0,
