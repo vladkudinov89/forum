@@ -5,17 +5,22 @@ namespace Tests\Feature;
 use App\Thread;
 use App\User;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
+use Illuminate\Notifications\DatabaseNotification;
 use Tests\TestCase;
 
 class NotificationsTest extends TestCase
 {
     use DatabaseTransactions;
 
+    public function setUp()
+    {
+        parent::setUp();
+
+        $this->signIn();
+    }
 
     public function test_a_notification_is_prepared_when_a_sub_thread_receives_a_new_reply_is_not_by_current_user()
     {
-        $this->signIn();
-
         $thread = create(Thread::class)->subscribe();
 
         $this->assertCount(0, auth()->user()->notifications);
@@ -37,14 +42,7 @@ class NotificationsTest extends TestCase
 
     public function test_a_user_can_clear_notification()
     {
-        $this->signIn();
-
-        $thread = create(Thread::class)->subscribe();
-
-        $thread->addReply([
-            'user_id' => create(User::class)->id,
-            'body' => 'Some reply here!'
-        ]);
+        create(DatabaseNotification::class);
 
         $this->assertCount(1, auth()->user()->unreadNotifications);
 
@@ -58,14 +56,7 @@ class NotificationsTest extends TestCase
 
     public function test_a_user_can_fetch_their_unread_notifications()
     {
-        $this->signIn();
-
-        $thread = create(Thread::class)->subscribe();
-
-        $thread->addReply([
-            'user_id' => create(User::class)->id,
-            'body' => 'Some reply here!'
-        ]);
+        create(DatabaseNotification::class);
 
         $response = $this
             ->getJson("/profiles/" . auth()->user()->name . "/notifications")
