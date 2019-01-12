@@ -2,8 +2,10 @@
 namespace Tests\Unit;
 
 use App\Channel;
+use App\Notifications\ThreadWasUpdated;
 use App\Thread;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
+use Illuminate\Support\Facades\Notification;
 use Tests\TestCase;
 
 class ThreadTest extends TestCase
@@ -97,6 +99,22 @@ class ThreadTest extends TestCase
          $this->assertDatabaseMissing('thread_subscribes', ['thread_id' => $thread->id]);
          
          $this->assertDatabaseMissing('thread_subscribes', ['user_id' => $userId]);
+    }
+
+    public function test_a_thread_notifies_all_registered_subdcribers_when_a_reply_is_added()
+    {
+        Notification::fake();
+
+        $this->signIn();
+
+        $this->thread->subscribe();
+
+        $this->thread->addReply([
+           'body' => 'Foobar',
+           'user_id' => 1
+        ]);
+
+        Notification::assertSentTo(auth()->user() , ThreadWasUpdated::class);
     }
 
 }
