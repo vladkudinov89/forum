@@ -81,7 +81,7 @@ class ParticipateInForumTest extends TestCase
 
         $this->assertDatabaseMissing('replies', ['id' => $reply->id]);
 
-        $this->assertEquals(0 , $reply->thread->fresh()->replies_count);
+        $this->assertEquals(0, $reply->thread->fresh()->replies_count);
     }
 
     public function test_auth_user_can_update_replies()
@@ -108,5 +108,24 @@ class ParticipateInForumTest extends TestCase
             ->patch("/replies/{$reply->id}")
             ->assertStatus(403);
     }
+
+    public function test_replies_that_contain_spam_not_be_created()
+    {
+        $this->signIn();
+
+        $thread = create(Thread::class);
+
+        $reply = make(Reply::class, ['body' => 'test spam']);
+
+        $this
+            ->withoutExceptionHandling()
+            ->expectException(\Exception::class);
+
+        $this->expectExceptionMessage('Your reply contains spam!');
+
+        $this->post($thread->path() . '/replies', $reply->toArray());
+
+    }
+
 }
   
