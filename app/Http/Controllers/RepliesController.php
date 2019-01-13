@@ -14,7 +14,7 @@ class RepliesController extends Controller
         $this->middleware('auth')->except('index');
     }
 
-    public function index($channelId ,Thread $thread)
+    public function index($channelId, Thread $thread)
     {
         return $thread->replies()->paginate(10);
     }
@@ -26,37 +26,35 @@ class RepliesController extends Controller
      * @return \Illuminate\Http\RedirectResponse
      * @throws \Illuminate\Validation\ValidationException
      */
-    public function store($chaneId, Thread $thread , Spam $spam)
+    public function store($chaneId, Thread $thread, Spam $spam)
     {
-        $this->validate(request() , [
-            'body' => 'required'
-        ]);
-
-        $spam->detected(request('body'));
+        $this->validateReply();
 
         $reply = $thread->addReply([
             'body' => request('body'),
             'user_id' => Auth::id()
         ]);
 
-        if(request()->expectsJson()){
+        if (request()->expectsJson()) {
             return $reply->load('owner');
         }
 
         return back()
-            ->with('flash' , 'Your reply has been left.');
+            ->with('flash', 'Your reply has been left.');
     }
 
     public function update(Reply $reply)
     {
-        $this->authorize('update' , $reply);
+        $this->authorize('update', $reply);
+
+        $this->validateReply();
 
         $reply->update(request(['body']));
     }
 
     public function destroy(Reply $reply)
     {
-        $this->authorize('update' , $reply);
+        $this->authorize('update', $reply);
 
         $reply->delete();
 
@@ -65,5 +63,12 @@ class RepliesController extends Controller
         }
 
         return back();
+    }
+
+    protected function validateReply()
+    {
+        $this->validate(request(), ['body' => 'required']);
+
+        resolve(Spam::class)->detected(request('body'));
     }
 }
