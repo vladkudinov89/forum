@@ -100,6 +100,13 @@ class Thread extends Model
             ->exists();
     }
 
+    public function hasUpdatesFor($user)
+    {
+        $key = $user->visitedThreadCacheKey($this);
+
+        return $this->updated_at > cache($key);
+    }
+
     public static function scopeFilter($query, $filters)
     {
         return $filters->apply($query);
