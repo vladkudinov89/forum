@@ -49,13 +49,13 @@ class CreateThreadsTest extends TestCase
     public function test_a_thread_requieres_a_title()
     {
         $this->publishThread(['title' => null])
-            ->assertSessionHasErrors('title');
+            ->assertStatus(422);
     }
 
     public function test_a_thread_requieres_a_body()
     {
         $this->publishThread(['body' => null])
-            ->assertSessionHasErrors('body');
+            ->assertStatus(422);
     }
 
     public function test_a_thread_requieres_a_valid_channel_id()
@@ -63,10 +63,10 @@ class CreateThreadsTest extends TestCase
         factory(Channel::class, 2)->create();
 
         $this->publishThread(['channel_id' => null])
-            ->assertSessionHasErrors('channel_id');
+            ->assertStatus(422);
 
         $this->publishThread(['channel_id' => 999])
-            ->assertSessionHasErrors('channel_id');
+            ->assertStatus(422);
     }
 
     public function publishThread($overrides = [])
@@ -75,7 +75,7 @@ class CreateThreadsTest extends TestCase
 
         $thread = make(Thread::class, $overrides);
 
-        return $this->post('/threads', $thread->toArray());
+        return $this->json('post','/threads', $thread->toArray());
     }
 
     public function test_guest_can_delete_test()

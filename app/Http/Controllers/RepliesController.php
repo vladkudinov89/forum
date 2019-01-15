@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Request\CreatePostRequest;
 use App\Reply;
 use App\Thread;
 use Illuminate\Support\Facades\Auth;
@@ -22,30 +23,15 @@ class RepliesController extends Controller
     /**
      * @param $chaneId
      * @param Thread $thread
+     * @param CreatePostRequest $form
      * @return \Illuminate\Http\RedirectResponse
-     * @throws \Illuminate\Validation\ValidationException
      */
-    public function store($chaneId, Thread $thread)
+    public function store($chaneId, Thread $thread, CreatePostRequest $form)
     {
-        if (Gate::denies('create' , new Reply)){
-            return response(
-                'Sorry,you must take a break', 422
-            );
-        }
-        try {
-            $this->authorize('create', new Reply);
-
-            $this->validate(request(), ['body' => 'required|spamfree']);
-
-            $reply = $thread->addReply([
-                'body' => request('body'),
-                'user_id' => Auth::id()
-            ]);
-        } catch (\Exception $e) {
-            return response(
-                'Sorry,your reply could not be saved', 422
-            );
-        }
+        $reply = $thread->addReply([
+            'body' => request('body'),
+            'user_id' => Auth::id()
+        ]);
 
         return $reply->load('owner');
     }
