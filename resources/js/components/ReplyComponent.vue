@@ -9,10 +9,10 @@
             <div v-if="signedIn">
                 <favorite-component :reply="data">
 
-            </favorite-component> 
+                </favorite-component>
             </div>
-           
-         
+
+
         </div>
 
         <div class="card">
@@ -48,43 +48,47 @@
 
 <script>
     import moment from 'moment';
-export default {
 
-    props: ['data'],
-    name: 'ReplyComponent',
-    data() {
-        return {
-            editing: false,
-            id:this.data.id,
-            body: this.data.body
-        }
-    },
-    computed: {
-        ago(){
-            return moment(this.data.created_at).fromNow();
+    export default {
+
+        props: ['data'],
+        name: 'ReplyComponent',
+        data() {
+            return {
+                editing: false,
+                id: this.data.id,
+                body: this.data.body
+            }
         },
-      signedIn () {
-        return window.App.signedIn;
-      },
-      canUpdate(){
-        return this.autorize(user => this.data.user_id == user.id);
-      }
-    },
-    methods: {
-        update() {
-            axios.patch('/replies/' + this.data.id, {
-                body: this.body
-            });
-
-            this.editing = false;
-
-            flash('Updated!');
+        computed: {
+            ago() {
+                return moment(this.data.created_at).fromNow();
+            },
+            signedIn() {
+                return window.App.signedIn;
+            },
+            canUpdate() {
+                return this.autorize(user => this.data.user_id == user.id);
+            }
         },
-        destroy() {
-            axios.delete('/replies/' + this.data.id);
+        methods: {
+            update() {
+                axios.patch('/replies/' + this.data.id, {
+                    body: this.body
+                })
+                    .catch(error => {
+                        flash(error.response.data, 'danger');
+                    });
 
-            this.$emit('deleted' , this.data.id);
+                this.editing = false;
+
+                flash('Updated!');
+            },
+            destroy() {
+                axios.delete('/replies/' + this.data.id);
+
+                this.$emit('deleted', this.data.id);
+            }
         }
     }
-}
 </script>
