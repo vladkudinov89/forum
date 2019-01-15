@@ -25,7 +25,7 @@ class ParticipateInForumTest extends TestCase
 
     public function test_can_auth_user_participate_threads()
     {
-        $user = create('App\User');
+        $this->signIn();
 
         $thread = create('App\Thread');
 
@@ -35,10 +35,7 @@ class ParticipateInForumTest extends TestCase
             ]
         );
 
-        $this
-            ->actingAs($user)
-            ->assertAuthenticatedAs($user, $guard = null)
-            ->post($thread->path() . '/replies', $reply->toArray());
+        $this->post($thread->path() . '/replies', $reply->toArray());
 
         $this->assertDatabaseHas('replies', ['body' => $reply->body]);
 
@@ -54,7 +51,7 @@ class ParticipateInForumTest extends TestCase
 
         $reply = make(Reply::class, ['body' => null]);
 
-        $this->post($thread->path() . '/replies', $reply->toArray())
+        $this->json('post',$thread->path() . '/replies', $reply->toArray())
             ->assertStatus(422);
     }
 
@@ -117,7 +114,7 @@ class ParticipateInForumTest extends TestCase
 
         $reply = make(Reply::class, ['body' => 'test spam']);
 
-        $this->post($thread->path() . '/replies', $reply->toArray())
+        $this->json('post',$thread->path() . '/replies', $reply->toArray())
         ->assertStatus(422);
 
     }
@@ -134,7 +131,7 @@ class ParticipateInForumTest extends TestCase
             ->assertStatus(201);
 
         $this->post($thread->path() . '/replies', $reply->toArray())
-            ->assertStatus(422);
+            ->assertStatus(429);
 
     }
 
