@@ -55,7 +55,7 @@ class ParticipateInForumTest extends TestCase
         $reply = make(Reply::class, ['body' => null]);
 
         $this->post($thread->path() . '/replies', $reply->toArray())
-            ->assertSessionHasErrors('body');
+            ->assertStatus(422);
     }
 
     public function test_unauthorized_users_cannot_delete_replies()
@@ -117,13 +117,8 @@ class ParticipateInForumTest extends TestCase
 
         $reply = make(Reply::class, ['body' => 'test spam']);
 
-        $this
-            ->withoutExceptionHandling()
-            ->expectException(\Exception::class);
-
-        $this->expectExceptionMessage('Your reply contains spam!');
-
-        $this->post($thread->path() . '/replies', $reply->toArray());
+        $this->post($thread->path() . '/replies', $reply->toArray())
+        ->assertStatus(422);
 
     }
 
