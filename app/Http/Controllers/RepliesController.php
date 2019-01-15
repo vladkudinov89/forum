@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Http\Request\CreatePostRequest;
+use App\Notifications\YouWereMentioned;
 use App\Reply;
 use App\Thread;
+use App\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
 
@@ -32,6 +34,16 @@ class RepliesController extends Controller
             'body' => request('body'),
             'user_id' => Auth::id()
         ]);
+
+        preg_match_all('/\@([^\s\.]+)/', $reply->body, $matches);
+
+        foreach ($matches[1] as $name) {
+            $user = User::whereName($name)->first();
+
+            if($user){
+                $user->notify(new YouWereMentioned($reply));
+            }
+        }
 
         return $reply->load('owner');
     }
