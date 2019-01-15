@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Reply;
 use App\Thread;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Gate;
 
 class RepliesController extends Controller
 {
@@ -26,7 +27,14 @@ class RepliesController extends Controller
      */
     public function store($chaneId, Thread $thread)
     {
+        if (Gate::denies('create' , new Reply)){
+            return response(
+                'Sorry,you must take a break', 422
+            );
+        }
         try {
+            $this->authorize('create', new Reply);
+
             $this->validate(request(), ['body' => 'required|spamfree']);
 
             $reply = $thread->addReply([
@@ -35,7 +43,7 @@ class RepliesController extends Controller
             ]);
         } catch (\Exception $e) {
             return response(
-                $e->getMessage(), 422
+                'Sorry,your reply could not be saved', 422
             );
         }
 

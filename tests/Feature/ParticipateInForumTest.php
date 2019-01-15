@@ -122,5 +122,22 @@ class ParticipateInForumTest extends TestCase
 
     }
 
+    public function test_a_user_can_add_reply_once_per_minute()
+    {
+        $this->signIn();
+
+        $thread = create(Thread::class);
+
+        $reply = make(Reply::class, ['body' => 'Simply reply']);
+
+        $this->post($thread->path() . '/replies', $reply->toArray())
+            ->assertStatus(201);
+
+        $this->post($thread->path() . '/replies', $reply->toArray())
+            ->assertStatus(422);
+
+    }
+
+
 }
   
