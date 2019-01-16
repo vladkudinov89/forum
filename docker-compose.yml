@@ -52,3 +52,12 @@ services:
                 - ./:/var/www
         working_dir: /var/www
         tty: true
+    php-test:
+        container_name: app-php-test
+        build:
+            context: ./
+            dockerfile: docker/php-test.docker
+        volumes:
+            - ./:/var/www
+        links:
+            - mysql
