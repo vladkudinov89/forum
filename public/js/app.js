@@ -2180,6 +2180,10 @@ __webpack_require__.r(__webpack_exports__);
     }
   },
   methods: {
+    cancel: function cancel() {
+      this.body = this.data.body;
+      this.editing = false;
+    },
     update: function update() {
       axios.patch('/replies/' + this.data.id, {
         body: this.body
@@ -55441,49 +55445,52 @@ var render = function() {
         _c("div", { staticClass: "body" }, [
           _vm.editing
             ? _c("div", { staticClass: "body" }, [
-                _c("div", { staticClass: "form-group" }, [
-                  _c("textarea", {
-                    directives: [
-                      {
-                        name: "model",
-                        rawName: "v-model",
-                        value: _vm.body,
-                        expression: "body"
-                      }
-                    ],
-                    staticClass: "form-control",
-                    domProps: { value: _vm.body },
-                    on: {
-                      input: function($event) {
-                        if ($event.target.composing) {
-                          return
+                _c(
+                  "form",
+                  { attrs: { action: "#" }, on: { submit: _vm.update } },
+                  [
+                    _c("div", { staticClass: "form-group" }, [
+                      _c("textarea", {
+                        directives: [
+                          {
+                            name: "model",
+                            rawName: "v-model.trim",
+                            value: _vm.body,
+                            expression: "body",
+                            modifiers: { trim: true }
+                          }
+                        ],
+                        staticClass: "form-control",
+                        attrs: { required: "" },
+                        domProps: { value: _vm.body },
+                        on: {
+                          input: function($event) {
+                            if ($event.target.composing) {
+                              return
+                            }
+                            _vm.body = $event.target.value.trim()
+                          },
+                          blur: function($event) {
+                            _vm.$forceUpdate()
+                          }
                         }
-                        _vm.body = $event.target.value
-                      }
-                    }
-                  })
-                ]),
-                _vm._v(" "),
-                _c(
-                  "button",
-                  {
-                    staticClass: "btn btn-sm btn-primary",
-                    on: { click: _vm.update }
-                  },
-                  [_vm._v("Update")]
-                ),
-                _vm._v(" "),
-                _c(
-                  "button",
-                  {
-                    staticClass: "btn btn-sm btn-link",
-                    on: {
-                      click: function($event) {
-                        _vm.editing = false
-                      }
-                    }
-                  },
-                  [_vm._v("Cancel")]
+                      })
+                    ]),
+                    _vm._v(" "),
+                    _c("button", { staticClass: "btn btn-sm btn-primary" }, [
+                      _vm._v("Update")
+                    ]),
+                    _vm._v(" "),
+                    _c(
+                      "button",
+                      {
+                        staticClass: "btn btn-sm btn-link",
+                        attrs: { type: "button" },
+                        on: { click: _vm.cancel }
+                      },
+                      [_vm._v("Cancel")]
+                    )
+                  ]
                 )
               ])
             : _c("div", {

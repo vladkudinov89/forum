@@ -21,14 +21,14 @@
                 <div class="body">
 
                     <div class="body" v-if="editing">
+                        <form @submit="update" action="#">
+                            <div class="form-group">
+                                <textarea v-model.trim="body" class="form-control" required></textarea>
+                            </div>
 
-                        <div class="form-group">
-                            <textarea v-model="body" class="form-control"></textarea>
-                        </div>
-
-                        <button class="btn btn-sm btn-primary" @click="update">Update</button>
-                        <button class="btn btn-sm btn-link" @click="editing = false">Cancel</button>
-
+                            <button class="btn btn-sm btn-primary">Update</button>
+                            <button class="btn btn-sm btn-link" @click="cancel" type="button">Cancel</button>
+                        </form>
                     </div>
 
                     <div class="body" v-else v-text="body"></div>
@@ -72,6 +72,10 @@
             }
         },
         methods: {
+            cancel() {
+                this.body = this.data.body;
+                this.editing = false;
+            },
             update() {
                 axios.patch('/replies/' + this.data.id, {
                     body: this.body
