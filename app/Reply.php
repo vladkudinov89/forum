@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Reply extends Model
 {
-    use Favoritable , RecordActivity;
+    use Favoritable, RecordActivity;
 
     protected $table = 'replies';
 
@@ -19,19 +19,19 @@ class Reply extends Model
 
     protected $guarded = [];
 
-    protected $appends = ['favoritesCount' , 'isFavorited'];
+    protected $appends = ['favoritesCount', 'isFavorited'];
 
-    protected $with = ['owner' , 'favorites'];
+    protected $with = ['owner', 'favorites'];
 
     protected static function boot()
     {
         parent::boot();
 
-        static::created(function ($reply){
+        static::created(function ($reply) {
             $reply->thread->increment('replies_count');
         });
 
-        static::deleted(function ($reply){
+        static::deleted(function ($reply) {
             $reply->thread->decrement('replies_count');
         });
     }
@@ -59,9 +59,17 @@ class Reply extends Model
 
     public function mentionedUsers()
     {
-        preg_match_all('/\@([^\s\.]+)/',$this->body, $matches);
+        preg_match_all('/\@([\w\-]+)/', $this->body, $matches);
 
         return $matches[1];
+    }
+
+    public function setBodyAttribute($body)
+    {
+        $this->attributes['body'] = preg_replace(
+            '/\@([\w\-]+)/',
+            '<a href="/profiles/$1">$0</a>',
+            $body);
     }
 
 }

@@ -31,7 +31,7 @@
                         </form>
                     </div>
 
-                    <div class="body" v-else v-text="body"></div>
+                    <div class="body" v-else v-html="body"></div>
                 </div>
 
             </div>
