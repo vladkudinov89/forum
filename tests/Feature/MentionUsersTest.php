@@ -14,7 +14,7 @@ class MentionUsersTest extends TestCase
 {
     use DatabaseTransactions;
 
-    public function test_mentioned_users_in_a_reply__are_notified()
+    public function test_mentioned_users_in_a_reply_are_notified()
     {
         $jonh = create(User::class , ['name' => 'JohnDoe']);
 
