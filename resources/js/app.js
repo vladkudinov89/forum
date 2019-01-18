@@ -40,6 +40,7 @@ Vue.component('thread-view', require('./pages/Thread.vue').default);
 Vue.component('user-notifications-component', require('./components/UserNotificationsComponent.vue').default);
 Vue.component('favorite-component', require('./components/FavoriteComponent.vue').default);
 Vue.component('paginator-component', require('./components/PaginatorComponent.vue').default);
+Vue.component('avatar-component', require('./components/AvatarComponent.vue').default);
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to
