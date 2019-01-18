@@ -61,3 +61,8 @@ services:
             - ./:/var/www
         links:
             - mysql
+    redis:
+        image: redis:alpine
+        container_name: app-redis
+        volumes:
+            - .redis:/data
