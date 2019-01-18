@@ -7,6 +7,20 @@
             <div class="pb-2 mt-4 mb-2 border-bottom">
                 <h1>{{$profileUser->name}}</h1>
                 <p>Since {{$profileUser->created_at->diffForHumans()}}</p>
+
+                @can('update' , $profileUser)
+                    <form action="{{route('avatar' ,$profileUser )}}" method="POST"
+                    enctype="multipart/form-data">
+                        {{csrf_field()}}
+
+                        <input type="file" name="avatar">
+
+                        <button type="submit" class="btn btn-info">Add Avatar</button>
+                    </form>
+                    @endcan
+
+                <img src="{{asset('storage/' . $profileUser->avatar_path)}}"
+                     width="50" height="50" alt="">
             </div>
         </div>
     </div>

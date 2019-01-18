@@ -9,6 +9,8 @@
                 <div class="card">
                     <div class="card-header d-flex justify-content-between align-content-center">
                         <span>
+                            <img src="{{asset('storage/'. $thread->creator->avatar())}}" alt="{{$thread->creator->name}}"
+                            width="25" height="25" class="mr-1">
                             <a href="{{route('profile' ,$thread->creator->name)}}">{{$thread->creator->name}}</a> posted: {{$thread->title}}
                         </span>
                         @can('update' , $thread)
