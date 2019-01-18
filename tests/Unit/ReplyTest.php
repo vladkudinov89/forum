@@ -33,10 +33,20 @@ class ReplyTest extends TestCase
 
     public function test_wraps_mentioned_username_in_reply_anchor_tags()
     {
-        $reply = new Reply(['body' => 'hello @Jone-Doe.']);
+        $reply = new Reply(['body' => 'hello @Jone Doe.']);
 
         $this->assertEquals(
-            'hello <a href="/profiles/Jone-Doe">@Jone-Doe</a>.',
+            'hello <a href="/profiles/Jone Doe">@Jone Doe</a>.',
+            $reply->body
+        );
+    }
+
+    public function test_wraps_mentioned_username_in_reply_anchor_tags_without_space()
+    {
+        $reply = new Reply(['body' => 'hello @Jone.']);
+
+        $this->assertEquals(
+            'hello <a href="/profiles/Jone">@Jone</a>.',
             $reply->body
         );
     }

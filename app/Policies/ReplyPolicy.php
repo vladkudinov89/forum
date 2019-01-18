@@ -10,7 +10,7 @@ class ReplyPolicy
 {
     use HandlesAuthorization;
 
-    public function update(User $user , Reply $reply)
+    public function update(User $user, Reply $reply)
     {
         return $reply->user_id == $user->id;
     }
@@ -19,8 +19,8 @@ class ReplyPolicy
     {
         $lastReply = $user->fresh()->lastReply;
 
-        if(! $lastReply) return true;
+        if (!$lastReply) return true;
 
-        return ! $lastReply->wasJustPublished();
+        return !$lastReply->wasJustPublished();
     }
 }

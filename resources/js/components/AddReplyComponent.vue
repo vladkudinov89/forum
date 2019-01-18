@@ -9,7 +9,8 @@
                                 id="body"
                                 class="form-control"
                                 placeholder="Have something to say?"
-                                rows="5" v-model="body"
+                                rows="5"
+                                v-model="body"
                         ></textarea>
             </div>
             <button type="submit"
@@ -25,6 +26,9 @@
 </template>
 
 <script>
+    import 'jquery.caret';
+    import 'at.js';
+
     export default {
         name: "AddReplyComponent",
         data() {
@@ -37,10 +41,24 @@
                 return window.App.signedIn;
             }
         },
+        mounted() {
+          $('textarea#body').atwho({
+             at : "@",
+             delay : 750,
+             callbacks : {
+                 remoteFilter: function (query , callback) {
+                     $.getJSON("/api/users" , {name: query} , function (usernames) {
+                         callback(usernames);
+                     })
+                 }
+             } 
+          });
+        },
         methods: {
             addReply() {
+                console.log(this.body);
                 axios.post(location.pathname + '/replies', {
-                    body: this.body
+                    body: $('#body').val()
                 })
                     .then(response => {
                         this.body = '';
