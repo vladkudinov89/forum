@@ -10,7 +10,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Thread extends Model
 {
-    use RecordActivity, VisitedThread;
+    use RecordActivity;
 
     protected $table = 'threads';
 
@@ -95,6 +95,11 @@ class Thread extends Model
         $key = $user->visitedThreadCacheKey($this);
 
         return $this->updated_at > cache($key);
+    }
+
+    public function visits()
+    {
+        return new Visits($this);
     }
 
     public static function scopeFilter($query, $filters)
