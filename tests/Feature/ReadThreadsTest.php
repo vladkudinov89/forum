@@ -91,4 +91,16 @@ class ReadThreadsTest extends TestCase
         $this->assertEquals(0 , end($response)['replies_count']);
     }
 
+    public function test_new_record_visits_when_visit_thread()
+    {
+        $thread = create(Thread::class);
+
+        $this->assertSame( 0 , $thread->visits);
+
+        $this->call('GET' , $thread->path());
+
+        $this->assertEquals( 1 , $thread->fresh()->visits);
+    }
+
+
 }

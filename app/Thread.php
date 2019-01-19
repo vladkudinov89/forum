@@ -17,7 +17,7 @@ class Thread extends Model
     protected $guarded = [];
 
     protected $fillable = [
-        'user_id', 'channel_id', 'title', 'body'
+        'user_id', 'channel_id', 'title', 'body' , 'visits'
     ];
 
     protected $with = ['creator', 'channel'];
@@ -99,7 +99,7 @@ class Thread extends Model
 
     public function visits()
     {
-        return new Visits($this);
+        return $this->visits;
     }
 
     public static function scopeFilter($query, $filters)

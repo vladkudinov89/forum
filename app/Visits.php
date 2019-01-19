@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\Redis;
 
 class Visits
 {
-    private $thread;
+    protected $thread;
 
     public function __construct($thread)
     {
