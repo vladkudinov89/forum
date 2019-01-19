@@ -10,6 +10,13 @@ class TrendingThreadsTest extends TestCase
 {
     use DatabaseTransactions;
 
+    protected function setUp()
+    {
+        parent::setUp();
+
+        Redis::del('trending_threads');
+    }
+
     public function test_it_increments_a_threads_score_each_time_it_read()
     {
         $this->assertEmpty(Redis::zrevrange('trending_threads' , 0 , -1));
@@ -18,7 +25,11 @@ class TrendingThreadsTest extends TestCase
 
         $this->call('GET' , $thread->path());
 
+        $trending = Redis::zrevrange('trending_threads' , 0 , -1);
+
+        $this->assertCount(1 , $trending);
+
+        $this->assertEquals($thread->title , json_decode($trending[0])->title);
 
     }
-
 }

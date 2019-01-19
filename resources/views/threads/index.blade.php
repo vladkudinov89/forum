@@ -14,7 +14,13 @@
                         Trending Threads
                     </div>
                     <div class="card-body">
-
+                        <ul class="list-group">
+                            @foreach($trending as $trend)
+                                <li class="list-group-item">
+                                    <a href="{{ url($trend->path) }}">{{$trend->title}}</a>
+                                </li>
+                            @endforeach
+                        </ul>
                     </div>
                 </div>
             </div>
