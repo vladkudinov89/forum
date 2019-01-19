@@ -5,11 +5,12 @@ namespace App;
 use App\Events\ThreadReceivedNewReply;
 use App\Notifications\ThreadWasUpdated;
 use App\Traits\RecordActivity;
+use App\Traits\VisitedThread;
 use Illuminate\Database\Eloquent\Model;
 
 class Thread extends Model
 {
-    use RecordActivity;
+    use RecordActivity, VisitedThread;
 
     protected $table = 'threads';
 
@@ -26,10 +27,6 @@ class Thread extends Model
     protected static function boot()
     {
         parent::boot();
-
-//        static::addGlobalScope('replyCount', function ($builder) {
-//            $builder->withCount('replies');
-//        });
 
         static::deleting(function ($thread) {
             $thread->replies->each->delete();

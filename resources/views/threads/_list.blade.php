@@ -31,5 +31,9 @@
             </article>
 
         </div>
+
+        <div class="card-footer">
+            {{ $thread->visits() }} Visits
+        </div>
     </div>
 @endforeach

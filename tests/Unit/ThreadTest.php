@@ -7,6 +7,7 @@ use App\Thread;
 use Carbon\Carbon;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Support\Facades\Notification;
+use Illuminate\Support\Facades\Redis;
 use Tests\TestCase;
 
 class ThreadTest extends TestCase
@@ -130,6 +131,23 @@ class ThreadTest extends TestCase
 
         $this->assertFalse($thread->hasUpdatesFor(auth()->user()));
 
+    }
+
+    public function test_view_count_visit_thread()
+    {
+        $thread = make(Thread::class , ['id' => 1]);
+
+        $thread->resetVisit();
+
+        $this->assertSame(0 , $thread->visits());
+
+        $thread->recordVisit();
+
+        $this->assertEquals(1 , $thread->visits());
+
+        $thread->recordVisit();
+
+        $this->assertEquals(2 , $thread->visits());
     }
 
 
