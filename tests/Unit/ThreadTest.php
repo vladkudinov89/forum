@@ -7,6 +7,7 @@ use App\Thread;
 use Carbon\Carbon;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Support\Facades\Notification;
+use Illuminate\Support\Facades\Redis;
 use Tests\TestCase;
 
 class ThreadTest extends TestCase
@@ -131,6 +132,4 @@ class ThreadTest extends TestCase
         $this->assertFalse($thread->hasUpdatesFor(auth()->user()));
 
     }
-
-
 }

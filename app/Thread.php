@@ -5,6 +5,7 @@ namespace App;
 use App\Events\ThreadReceivedNewReply;
 use App\Notifications\ThreadWasUpdated;
 use App\Traits\RecordActivity;
+use App\Traits\VisitedThread;
 use Illuminate\Database\Eloquent\Model;
 
 class Thread extends Model
@@ -16,7 +17,7 @@ class Thread extends Model
     protected $guarded = [];
 
     protected $fillable = [
-        'user_id', 'channel_id', 'title', 'body'
+        'user_id', 'channel_id', 'title', 'body' , 'visits'
     ];
 
     protected $with = ['creator', 'channel'];
@@ -26,10 +27,6 @@ class Thread extends Model
     protected static function boot()
     {
         parent::boot();
-
-//        static::addGlobalScope('replyCount', function ($builder) {
-//            $builder->withCount('replies');
-//        });
 
         static::deleting(function ($thread) {
             $thread->replies->each->delete();
@@ -98,6 +95,11 @@ class Thread extends Model
         $key = $user->visitedThreadCacheKey($this);
 
         return $this->updated_at > cache($key);
+    }
+
+    public function visits()
+    {
+        return $this->visits;
     }
 
     public static function scopeFilter($query, $filters)
