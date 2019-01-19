@@ -23,6 +23,10 @@ class UserAvatarController extends Controller
            'avatar_path' => request()->file('avatar')->store('avatars','public')
         ]);
 
+        if (request()->expectsJson()) {
+            return response( [], 204);
+        }
+
         return back();
     }
 }
