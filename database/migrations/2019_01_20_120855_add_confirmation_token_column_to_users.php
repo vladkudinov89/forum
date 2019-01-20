@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class AddUserEmailConfirm extends Migration
+class AddConfirmationTokenColumnToUsers extends Migration
 {
     /**
      * Run the migrations.
@@ -14,7 +14,7 @@ class AddUserEmailConfirm extends Migration
     public function up()
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->boolean('confirmed')->default(false)->after('avatar_path');
+            $table->string('confirmation_token' , 25)->nullable()->after('confirmed');
         });
     }
 
@@ -26,7 +26,7 @@ class AddUserEmailConfirm extends Migration
     public function down()
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->boolean('confirmed')->default(false)->after('avatar_path');
+            $table->string('confirmation_token' , 25)->nullable()->after('confirmed');
         });
     }
 }
