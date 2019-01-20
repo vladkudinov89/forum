@@ -36,7 +36,7 @@ class CreateThreadsTest extends TestCase
 
     public function test_auth_user_must_confirm_their_email_address_before_create_threads()
     {
-        $user = create(User::class  , ['confirmed' => false]);
+        $user = create(User::class, ['confirmed' => false]);
 
         $this->signIn($user);
 
@@ -45,13 +45,13 @@ class CreateThreadsTest extends TestCase
         $response = $this->post('/threads', $thread->toArray());
 
         $response->assertRedirect(route('threads'))
-            ->assertSessionHas('flash' , 'You must confirm your email address');
+            ->assertSessionHas('flash', 'You must confirm your email address');
     }
 
 
     public function test_an_authenticated_user_can_create_threads()
     {
-        $user = create(User::class  , ['confirmed' => true]);
+        $user = create(User::class, ['confirmed' => true]);
 
         $this->signIn($user);
 
@@ -76,26 +76,45 @@ class CreateThreadsTest extends TestCase
             ->assertStatus(422);
     }
 
-    public function test_a_thread_requieres_a_valid_channel_id()
+    public function test_a_thread_requires_a_valid_channel_id()
     {
-        factory(Channel::class, 2)->create();
+        $channel = create(Channel::class);
 
         $this->publishThread(['channel_id' => null])
             ->assertStatus(422);
 
         $this->publishThread(['channel_id' => 999])
             ->assertStatus(422);
+
+        $this->publishThread(['channel_id' => $channel->id])
+            ->assertSee($channel->name);
     }
+
+    public function test_a_thread_requires_a_unique_slug()
+    {
+        $user = create(User::class , ['confirmed' => true]);
+
+        $this->signIn($user);
+
+        $thread = create(Thread::class, ['title' => 'Foo Title', 'slug' => 'foo-title']);
+
+        $this->assertEquals($thread->fresh()->slug, 'foo-title');
+
+        $this->post(route('threads'), $thread->toArray());
+
+        $this->assertTrue(Thread::whereSlug('foo-title-2')->exists());
+    }
+
 
     public function publishThread($overrides = [])
     {
-        $user = create(User::class  , ['confirmed' => true]);
+        $user = create(User::class, ['confirmed' => true]);
 
         $this->signIn($user);
 
         $thread = make(Thread::class, $overrides);
 
-        return $this->json('post','/threads', $thread->toArray());
+        return $this->json('post', '/threads', $thread->toArray());
     }
 
     public function test_guest_can_delete_test()
