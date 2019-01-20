@@ -67,6 +67,8 @@ class User extends Authenticatable
     {
         $this->confirmed = true;
 
+        $this->confirmation_token = NULL;
+
         $this->save();
     }
 
