@@ -6,6 +6,7 @@ use App\Activity;
 use App\Channel;
 use App\Reply;
 use App\Thread;
+use App\User;
 use Carbon\Carbon;
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
@@ -33,9 +34,26 @@ class CreateThreadsTest extends TestCase
             ->assertRedirect('/login');
     }
 
+    public function test_auth_user_must_confirm_their_email_address_before_create_threads()
+    {
+        $user = create(User::class  , ['confirmed' => false]);
+
+        $this->signIn($user);
+
+        $thread = make(Thread::class);
+
+        $response = $this->post('/threads', $thread->toArray());
+
+        $response->assertRedirect(route('threads'))
+            ->assertSessionHas('flash' , 'You must confirm your email address');
+    }
+
+
     public function test_an_authenticated_user_can_create_threads()
     {
-        $this->signIn();
+        $user = create(User::class  , ['confirmed' => true]);
+
+        $this->signIn($user);
 
         $thread = make(Thread::class);
 
@@ -71,7 +89,9 @@ class CreateThreadsTest extends TestCase
 
     public function publishThread($overrides = [])
     {
-        $this->signIn();
+        $user = create(User::class  , ['confirmed' => true]);
+
+        $this->signIn($user);
 
         $thread = make(Thread::class, $overrides);
 
