@@ -3519,6 +3519,13 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: ['data'],
@@ -3527,7 +3534,8 @@ __webpack_require__.r(__webpack_exports__);
     return {
       editing: false,
       id: this.data.id,
-      body: this.data.body
+      body: this.data.body,
+      isBest: false
     };
   },
   computed: {
@@ -3562,6 +3570,9 @@ __webpack_require__.r(__webpack_exports__);
     destroy: function destroy() {
       axios.delete('/replies/' + this.data.id);
       this.$emit('deleted', this.data.id);
+    },
+    markBestReply: function markBestReply() {
+      this.isBest = true;
     }
   }
 });
@@ -57396,6 +57407,7 @@ var render = function() {
       "div",
       {
         staticClass: "card-header d-flex justify-content-between",
+        class: _vm.isBest ? "alert-success" : "",
         attrs: { id: "reply-" + _vm.id }
       },
       [
@@ -57479,33 +57491,62 @@ var render = function() {
         ])
       ]),
       _vm._v(" "),
-      _vm.canUpdate
-        ? _c("div", { staticClass: "card-footer d-flex" }, [
+      _c(
+        "div",
+        {
+          staticClass:
+            "card-footer d-flex justify-content-between align-items-center"
+        },
+        [
+          _vm.canUpdate
+            ? _c("div", {}, [
+                _c(
+                  "button",
+                  {
+                    staticClass: "btn btn-secondary btn-sm mr-2",
+                    attrs: { type: "button" },
+                    on: {
+                      click: function($event) {
+                        _vm.editing = true
+                      }
+                    }
+                  },
+                  [_vm._v("Edit")]
+                ),
+                _vm._v(" "),
+                _c(
+                  "button",
+                  {
+                    staticClass: "btn btn-danger btn-sm",
+                    attrs: { type: "button" },
+                    on: { click: _vm.destroy }
+                  },
+                  [_vm._v("Delete")]
+                )
+              ])
+            : _vm._e(),
+          _vm._v(" "),
+          _c("div", {}, [
             _c(
               "button",
               {
-                staticClass: "btn btn-secondary btn-sm mr-2",
-                attrs: { type: "button" },
-                on: {
-                  click: function($event) {
-                    _vm.editing = true
+                directives: [
+                  {
+                    name: "show",
+                    rawName: "v-show",
+                    value: !_vm.isBest,
+                    expression: "! isBest"
                   }
-                }
-              },
-              [_vm._v("Edit")]
-            ),
-            _vm._v(" "),
-            _c(
-              "button",
-              {
-                staticClass: "btn btn-danger btn-sm",
+                ],
+                staticClass: "btn btn-outline-secondary",
                 attrs: { type: "button" },
-                on: { click: _vm.destroy }
+                on: { click: _vm.markBestReply }
               },
-              [_vm._v("Delete")]
+              [_c("span", { staticClass: "fa fa-thumbs-up" })]
             )
           ])
-        : _vm._e()
+        ]
+      )
     ])
   ])
 }
