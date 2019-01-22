@@ -40,6 +40,8 @@ Route::delete('/replies/{reply}/favorites' , 'FavoritesController@destroy');
 Route::patch('/replies/{reply}' , 'RepliesController@update');
 Route::delete('/replies/{reply}' , 'RepliesController@destroy');
 
+Route::post('/replies/{reply}/best' , 'BestRepliesController@store')->name('best-replies.store');
+
 Route::get('/profiles/{user}' , 'ProfilesController@show')->name('profile');
 
 Route::get('/profiles/{user}/notifications' , 'UserNotificationsController@index');
