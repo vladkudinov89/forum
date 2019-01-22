@@ -36,11 +36,6 @@
                 body: ''
             }
         },
-        computed: {
-            signedIn() {
-                return window.App.signedIn;
-            }
-        },
         mounted() {
           $('textarea#body').atwho({
              at : "@",
@@ -56,7 +51,6 @@
         },
         methods: {
             addReply() {
-                console.log(this.body);
                 axios.post(location.pathname + '/replies', {
                     body: $('#body').val()
                 })
