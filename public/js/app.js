@@ -3520,6 +3520,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: ['data'],
@@ -57486,62 +57487,67 @@ var render = function() {
         ])
       ]),
       _vm._v(" "),
-      _c(
-        "div",
-        {
-          staticClass:
-            "card-footer d-flex justify-content-between align-items-center"
-        },
-        [
-          _vm.autorize("updateReply", _vm.reply)
-            ? _c("div", {}, [
-                _c(
-                  "button",
-                  {
-                    staticClass: "btn btn-secondary btn-sm mr-2",
-                    attrs: { type: "button" },
-                    on: {
-                      click: function($event) {
-                        _vm.editing = true
-                      }
-                    }
-                  },
-                  [_vm._v("Edit")]
-                ),
-                _vm._v(" "),
-                _c(
-                  "button",
-                  {
-                    staticClass: "btn btn-danger btn-sm",
-                    attrs: { type: "button" },
-                    on: { click: _vm.destroy }
-                  },
-                  [_vm._v("Delete")]
-                )
-              ])
-            : _vm._e(),
-          _vm._v(" "),
-          _c("div", {}, [
-            _c(
-              "button",
-              {
-                directives: [
-                  {
-                    name: "show",
-                    rawName: "v-show",
-                    value: !_vm.isBest,
-                    expression: "! isBest"
-                  }
-                ],
-                staticClass: "btn btn-outline-secondary",
-                attrs: { type: "button" },
-                on: { click: _vm.markBestReply }
-              },
-              [_c("span", { staticClass: "fa fa-thumbs-up" })]
-            )
-          ])
-        ]
-      )
+      _vm.autorize("updateReply", _vm.reply) ||
+      _vm.autorize("updateThread", _vm.reply.thread)
+        ? _c(
+            "div",
+            {
+              staticClass:
+                "card-footer d-flex justify-content-between align-items-center"
+            },
+            [
+              _vm.autorize("updateReply", _vm.reply)
+                ? _c("div", {}, [
+                    _c(
+                      "button",
+                      {
+                        staticClass: "btn btn-secondary btn-sm mr-2",
+                        attrs: { type: "button" },
+                        on: {
+                          click: function($event) {
+                            _vm.editing = true
+                          }
+                        }
+                      },
+                      [_vm._v("Edit")]
+                    ),
+                    _vm._v(" "),
+                    _c(
+                      "button",
+                      {
+                        staticClass: "btn btn-danger btn-sm",
+                        attrs: { type: "button" },
+                        on: { click: _vm.destroy }
+                      },
+                      [_vm._v("Delete")]
+                    )
+                  ])
+                : _vm._e(),
+              _vm._v(" "),
+              _vm.autorize("updateThread", _vm.reply.thread)
+                ? _c("div", {}, [
+                    _c(
+                      "button",
+                      {
+                        directives: [
+                          {
+                            name: "show",
+                            rawName: "v-show",
+                            value: !_vm.isBest,
+                            expression: "! isBest"
+                          }
+                        ],
+                        staticClass: "btn btn-outline-secondary",
+                        attrs: { type: "button" },
+                        on: { click: _vm.markBestReply }
+                      },
+                      [_c("span", { staticClass: "fa fa-thumbs-up" })]
+                    )
+                  ])
+                : _vm._e()
+            ]
+          )
+        : _vm._e()
     ])
   ])
 }
@@ -69019,6 +69025,9 @@ var user = window.App.user;
 module.exports = {
   updateReply: function updateReply(reply) {
     return reply.user_id === user.id;
+  },
+  updateThread: function updateThread(thread) {
+    return thread.user_id === user.id;
   }
 };
 

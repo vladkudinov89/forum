@@ -36,12 +36,13 @@
 
             </div>
 
-            <div class="card-footer d-flex justify-content-between align-items-center">
+            <div class="card-footer d-flex justify-content-between align-items-center"
+                 v-if="autorize('updateReply', reply) || autorize('updateThread', reply.thread)">
                <div class="" v-if="autorize('updateReply', reply)">
                    <button type="button" class="btn btn-secondary btn-sm mr-2" @click="editing = true">Edit</button>
                    <button type="button" class="btn btn-danger btn-sm" @click="destroy">Delete</button>
                </div>
-                <div class="">
+                <div class="" v-if="autorize('updateThread', reply.thread)">
                     <button type="button" class="btn btn-outline-secondary" v-show="! isBest" @click="markBestReply">
                         <span class="fa fa-thumbs-up"></span>
                     </button>
