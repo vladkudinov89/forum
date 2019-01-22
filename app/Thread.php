@@ -17,7 +17,7 @@ class Thread extends Model
     protected $guarded = [];
 
     protected $fillable = [
-        'user_id', 'channel_id', 'title', 'body' , 'visits' , 'slug' , 'best_reply_id'
+        'user_id', 'channel_id', 'title', 'body' , 'visits' , 'slug' , 'best_reply_id' , 'locked'
     ];
 
     protected $with = ['creator', 'channel'];
@@ -64,6 +64,13 @@ class Thread extends Model
         event(new ThreadReceivedNewReply($reply));
 
         return $reply;
+    }
+
+    public function lock()
+    {
+        $this->update([
+           'locked' => true
+        ]);
     }
 
     public function subscribe($userId = null)
