@@ -17,7 +17,7 @@ class Thread extends Model
     protected $guarded = [];
 
     protected $fillable = [
-        'user_id', 'channel_id', 'title', 'body' , 'visits' , 'slug'
+        'user_id', 'channel_id', 'title', 'body' , 'visits' , 'slug' , 'best_reply_id'
     ];
 
     protected $with = ['creator', 'channel'];
@@ -127,24 +127,10 @@ class Thread extends Model
         $this->attributes['slug'] = $slug;
     }
 
-//    protected function incrementSlug($slug , $count = 2)
-//    {
-//        $origin = $slug;
-//
-//        while (static::whereSlug($slug)->execute()){
-//            $slug = "{$origin}-" . $count++;
-//        }
-//
-//        return $slug;
-//
-////        $max = static::whereTitle($this->title)->latest('id')->value('slug');
-////
-////        if( is_numeric($max[-1]) ){
-////            return preg_replace_callback('/(\d+)$/' , function ($matches){
-////               return $matches[1] + 1;
-////            } , $max);
-////        }
-////
-////        return "{$slug}-2";
-//    }
+    public function markBestReply(Reply $reply)
+    {
+        $this->best_reply_id = $reply->id;
+
+        $this->save();
+    }
 }

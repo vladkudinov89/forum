@@ -1,6 +1,6 @@
 <template>
     <div>
-        <div :id="'reply-'+id" class="card-header d-flex justify-content-between">
+        <div :id="'reply-'+id" class="card-header d-flex justify-content-between" :class="isBest ? 'alert-success' : ''">
             <div class="">
                 <a :href="'/profiles/' + data.owner.name" v-text="data.owner.name"></a>
                 said <span v-text="ago"></span>...
@@ -36,9 +36,17 @@
 
             </div>
 
-            <div class="card-footer d-flex" v-if="canUpdate">
-                <button type="button" class="btn btn-secondary btn-sm mr-2" @click="editing = true">Edit</button>
-                <button type="button" class="btn btn-danger btn-sm" @click="destroy">Delete</button>
+            <div class="card-footer d-flex justify-content-between align-items-center"
+                 v-if="autorize('updateReply', reply) || autorize('updateThread', reply.thread)">
+               <div class="" v-if="autorize('updateReply', reply)">
+                   <button type="button" class="btn btn-secondary btn-sm mr-2" @click="editing = true">Edit</button>
+                   <button type="button" class="btn btn-danger btn-sm" @click="destroy">Delete</button>
+               </div>
+                <div class="" v-if="autorize('updateThread', reply.thread)">
+                    <button type="button" class="btn btn-outline-secondary" v-show="! isBest" @click="markBestReply">
+                        <span class="fa fa-thumbs-up"></span>
+                    </button>
+                </div>
             </div>
 
         </div>
@@ -57,19 +65,20 @@
             return {
                 editing: false,
                 id: this.data.id,
-                body: this.data.body
+                body: this.data.body,
+                isBest: this.data.isBest,
+                reply : this.data
             }
         },
         computed: {
             ago() {
                 return moment(this.data.created_at).fromNow();
-            },
-            signedIn() {
-                return window.App.signedIn;
-            },
-            canUpdate() {
-                return this.autorize(user => this.data.user_id == user.id);
             }
+        },
+        created(){
+          window.events.$on('best-reply-selected' , id => {
+            this.isBest = (id === this.id);
+          });
         },
         methods: {
             cancel() {
@@ -92,6 +101,13 @@
                 axios.delete('/replies/' + this.data.id);
 
                 this.$emit('deleted', this.data.id);
+            },
+            markBestReply(){
+                axios.post('/replies/' + this.data.id + '/best').then(() => {
+                    flash('Best Reply Marked!');
+                });
+
+                window.events.$emit('best-reply-selected' , this.data.id)
             }
         }
     }
