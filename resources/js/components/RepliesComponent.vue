@@ -9,7 +9,11 @@
 
         <paginator-component :dataSet="dataSet" @changed="fetch"></paginator-component>
 
-        <add-reply-component @created="add"></add-reply-component>
+        <p v-if="$parent.locked">
+            This thread has been locked. No more replies are allowed.
+        </p>
+
+        <add-reply-component v-else="" @created="add"></add-reply-component>
     </div>
 
 </template>

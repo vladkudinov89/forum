@@ -38,7 +38,7 @@ class ReadThreadsTest extends TestCase
     {
         $reply = create('App\Reply', ['thread_id' => $this->thread->id]);
 
-        $this->assertDatabaseHas('replies' , ['body' => $reply->body]);
+        $this->assertDatabaseHas('replies', ['body' => $reply->body]);
     }
 
     public function test_a_user_can_filter_threads_according_to_a_channel()
@@ -56,13 +56,13 @@ class ReadThreadsTest extends TestCase
 
     public function test_a_user_can_filter_threads_by_username()
     {
-        $this->signIn(create(User::class, ['name' => 'JohnDoe']));
+        $this->signIn(create(User::class, ['name' => 'JohnDoe1']));
 
         $threadByJohn = create(Thread::class, ['user_id' => auth()->id()]);
 
         $threadNotByJohn = create(Thread::class);
 
-        $this->get('threads?by=JohnDoe')
+        $this->getJson(route('threads', ['by' => 'JohnDoe1']))
             ->assertSee($threadByJohn->title)
             ->assertDontSee($threadNotByJohn->title);
     }
@@ -71,12 +71,12 @@ class ReadThreadsTest extends TestCase
     {
         $thread = create(Thread::class);
 
-        create(Reply::class , ['thread_id' =>$thread->id] , 2);
+        create(Reply::class, ['thread_id' => $thread->id], 2);
 
         $response = $this->getJson($thread->path() . '/replies')->json();
 
-        $this->assertCount(2 , $response['data']);
-        $this->assertEquals(2 , $response['total']);
+        $this->assertCount(2, $response['data']);
+        $this->assertEquals(2, $response['total']);
 
     }
 
@@ -84,22 +84,22 @@ class ReadThreadsTest extends TestCase
     {
         $thread = create(Thread::class);
 
-        create(Reply::class , ['thread_id' => $thread->id]);
+        create(Reply::class, ['thread_id' => $thread->id]);
 
         $response = $this->getJson('threads?unanswered=1')->json();
 
-        $this->assertEquals(0 , end($response)['replies_count']);
+        $this->assertEquals(0, end($response)['replies_count']);
     }
 
     public function test_new_record_visits_when_visit_thread()
     {
         $thread = create(Thread::class);
 
-        $this->assertSame( 0 , $thread->visits);
+        $this->assertSame(0, $thread->visits);
 
-        $this->call('GET' , $thread->path());
+        $this->call('GET', $thread->path());
 
-        $this->assertEquals( 1 , $thread->fresh()->visits);
+        $this->assertEquals(1, $thread->fresh()->visits);
     }
 
 
