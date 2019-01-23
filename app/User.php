@@ -21,7 +21,7 @@ class User extends Authenticatable
     ];
 
     protected $casts = [
-      'confirmed' => 'boolean'
+        'confirmed' => 'boolean'
     ];
 
     /**
@@ -30,12 +30,17 @@ class User extends Authenticatable
      * @var array
      */
     protected $hidden = [
-        'password', 'remember_token', 'email'
+        'password', 'remember_token', 'email' , 'isAdmin'
     ];
 
     public function getRouteKeyName()
     {
         return 'name';
+    }
+
+    public function isAdmin()
+    {
+        return $this->isAdmin;
     }
 
     public function threads()
@@ -55,7 +60,7 @@ class User extends Authenticatable
 
     public function visitedThreadCacheKey($thread)
     {
-        return sprintf("users.%s.visits.%s" , $this->id , $thread->id);
+        return sprintf("users.%s.visits.%s", $this->id, $thread->id);
     }
 
     public function getAvatarPathAttribute($avatar)
@@ -74,6 +79,6 @@ class User extends Authenticatable
 
     public function read($thread)
     {
-        cache()->forever($this->visitedThreadCacheKey($thread) , Carbon::now());
+        cache()->forever($this->visitedThreadCacheKey($thread), Carbon::now());
     }
 }
