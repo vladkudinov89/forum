@@ -21,7 +21,9 @@ class User extends Authenticatable
     ];
 
     protected $casts = [
-        'confirmed' => 'boolean'
+        'confirmed' => 'boolean',
+        'isAdmin' => 'boolean',
+
     ];
 
     /**
@@ -30,7 +32,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $hidden = [
-        'password', 'remember_token', 'email' , 'isAdmin'
+        'password', 'remember_token', 'email'
     ];
 
     public function getRouteKeyName()

@@ -1,7 +1,8 @@
 @extends('layouts.app')
 
 @section('content')
-    <thread-view inline-template :initial-replies-count="{{$thread->replies_count}}">
+    {{--<thread-view inline-template :initial-replies-count="{{$thread->replies_count}}" :data-locked="{{$thread->locked}}">--}}
+    <thread-view inline-template :thread="{{$thread}}">
         <div class="container">
             <div class="row">
                 <div class="col-md-8">
@@ -55,7 +56,14 @@
 
                                 <p>
                                     <subscribe-button-component
+                                            v-if="signedIn"
                                             :active="{{$thread->isSubscribedTo ? 'true' : 'false'}}"></subscribe-button-component>
+
+                                    <button
+                                            v-if="autorize('isAdmin')"
+                                            @click="toogleLock"
+                                            class="btn btn-outline-info"
+                                            v-text="locked ? 'Unlock' : 'Lock'"></button>
                                 </p>
 
                             </div>
