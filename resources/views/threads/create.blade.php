@@ -1,5 +1,9 @@
 @extends('layouts.app')
 
+@section('head')
+    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+@endsection
+
 @section('content')
     <div class="container">
         <div class="row justify-content-center">
@@ -31,7 +35,8 @@
 
                             <div class="form-group">
                                 <label for="body">Body:</label>
-                                <textarea class="form-control" required name="body" id="body" rows="8">{{old('body')}}</textarea>
+                                <textarea class="form-control" required name="body" id="body"
+                                          rows="8">{{old('body')}}</textarea>
                                 @if($errors->has('body'))
                                     <div class="alert alert-danger">{{$errors->first('body')}}</div>
                                 @endif
@@ -42,11 +47,16 @@
                                     <option value="">Choose channel...</option>
                                     @foreach($channels as $channel)
                                         <option value='{{ $channel->id }}'
-                                        {{old('channel_id') == $channel->id ? 'selected' : ''}}
+                                                {{old('channel_id') == $channel->id ? 'selected' : ''}}
                                         >{{ $channel->name }}</option>
                                     @endforeach
                                 </select>
                             </div>
+
+                            <div class="form-group">
+                                <div class="g-recaptcha" data-sitekey="6LccTIwUAAAAAE3urB2JRJL2DtRG7djuSaXv1A7n"></div>
+                            </div>
+
 
                             <div class="form-group">
                                 <button type="submit" class="btn btn-primary">Publish</button>
