@@ -25,7 +25,7 @@ class ThreadsController extends Controller
      * @param Trending $trending
      * @return \Illuminate\Http\Response
      */
-    public function index(Channel $channel, ThreadFilters $filters , Trending $trending)
+    public function index(Channel $channel, ThreadFilters $filters, Trending $trending)
     {
         $threads = $this->getThreads($channel, $filters);
 
@@ -57,13 +57,13 @@ class ThreadsController extends Controller
      * @return \Illuminate\Http\Response
      * @throws \Illuminate\Validation\ValidationException
      */
-    public function store(Request $request , Recaptcha $recaptcha)
+    public function store(Request $request, Recaptcha $recaptcha)
     {
         $this->validate($request, [
             'title' => 'required|spamfree',
             'body' => 'required|spamfree',
             'channel_id' => 'required|exists:channels,id',
-            'g-recaptcha-response' => ['required' , $recaptcha]
+            'g-recaptcha-response' => ['required', $recaptcha]
         ]);
 
         $thread = Thread::create([
@@ -73,8 +73,8 @@ class ThreadsController extends Controller
             'body' => request('body')
         ]);
 
-        if(request()->wantsJson()){
-            return response($thread , 201);
+        if (request()->wantsJson()) {
+            return response($thread, 201);
         }
 
         return redirect($thread->path())
@@ -89,7 +89,7 @@ class ThreadsController extends Controller
      * @param Trending $trending
      * @return \Illuminate\Http\Response
      */
-    public function show($channeId, Thread $thread , Trending $trending)
+    public function show($channeId, Thread $thread, Trending $trending)
     {
         if (auth()->check()) {
             auth()->user()->read($thread);
@@ -116,13 +116,20 @@ class ThreadsController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request $request
+     * @param $channelId
      * @param  \App\Thread $thread
-     * @return \Illuminate\Http\Response
+     * @return void
      */
-    public function update(Request $request, Thread $thread)
+    public function update($channelId, Thread $thread)
     {
-        //
+        $this->authorize('update' , $thread);
+
+        $thread->update(request()->validate([
+            'title' => 'required|spamfree',
+            'body' => 'required|spamfree'
+        ]));
+
+        return $thread;
     }
 
     /**
