@@ -7,10 +7,11 @@ use App\Notifications\ThreadWasUpdated;
 use App\Traits\RecordActivity;
 use App\Traits\VisitedThread;
 use Illuminate\Database\Eloquent\Model;
+use Laravel\Scout\Searchable;
 
 class Thread extends Model
 {
-    use RecordActivity;
+    use RecordActivity , Searchable;
 
     protected $table = 'threads';
 
