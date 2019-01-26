@@ -1,37 +1,12 @@
 @extends('layouts.app')
 
 @section('content')
-    {{--<thread-view inline-template :initial-replies-count="{{$thread->replies_count}}" :data-locked="{{$thread->locked}}">--}}
     <thread-view inline-template :thread="{{$thread}}">
         <div class="container">
             <div class="row">
                 <div class="col-md-8">
 
-                    <div class="card">
-                        <div class="card-header d-flex justify-content-between align-content-center">
-                        <span>
-                            <img src="{{$thread->creator->avatar_path}}" alt="{{$thread->creator->name}}"
-                                 width="25" height="25" class="mr-1">
-                            <a href="{{route('profile' ,$thread->creator->name)}}">{{$thread->creator->name}}</a> posted: {{$thread->title}}
-                        </span>
-                            @can('update' , $thread)
-                                <form action="{{$thread->path()}}" method="post">
-                                    {{csrf_field()}}
-                                    {{method_field('DELETE')}}
-                                    <button type="submit" class="btn btn-danger">Delete Thread</button>
-                                </form>
-                            @endcan
-                        </div>
-
-                        <div class="card-body">
-
-                            <article>
-
-                                <div class="body">{{$thread->body}}</div>
-                            </article>
-
-                        </div>
-                    </div>
+                    @include('threads._thread_view')
 
                     <h3 class="text-center mt-4 mb-4">Replies</h3>
                     <replies-component
