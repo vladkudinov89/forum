@@ -3,9 +3,7 @@
 namespace App;
 
 use App\Events\ThreadReceivedNewReply;
-use App\Notifications\ThreadWasUpdated;
 use App\Traits\RecordActivity;
-use App\Traits\VisitedThread;
 use Illuminate\Database\Eloquent\Model;
 use Laravel\Scout\Searchable;
 
