@@ -8,8 +8,21 @@
 
                 {{$threads->render()}}
             </div>
-            @if(count($trending))
-                <div class="col-md-4">
+
+            <div class="col-md-4">
+                <div class="card mb-4">
+                    <div class="card-header">
+                        Search Thread
+                    </div>
+                    <div class="card-body">
+                        <form action="/threads/search" method="GET">
+                            <input type="text" class="form-control mb-2" placeholder="Input search words" name="q">
+                            <button class="btn btn-info">Search</button>
+                        </form>
+                    </div>
+                </div>
+
+                @if(count($trending))
                     <div class="card mb-4">
                         <div class="card-header">
                             Trending Threads
@@ -24,7 +37,7 @@
                             </ul>
                         </div>
                     </div>
-                </div>
+            </div>
             @endif
         </div>
     </div>
