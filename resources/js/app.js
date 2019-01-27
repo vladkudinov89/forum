@@ -5,13 +5,15 @@
  * building robust, powerful web applications using Vue and Laravel.
  */
 
+import InstantSearch from 'vue-instantsearch';
+
 require('./bootstrap');
 
 window.Vue = require('vue');
 
-
-
 window.events = new Vue();
+
+Vue.use(InstantSearch);
 
 window.flash = function (message , level = 'success'){
   window.events.$emit('flash' , {message , level});
