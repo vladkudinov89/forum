@@ -3,14 +3,13 @@
 namespace App;
 
 use App\Events\ThreadReceivedNewReply;
-use App\Notifications\ThreadWasUpdated;
 use App\Traits\RecordActivity;
-use App\Traits\VisitedThread;
 use Illuminate\Database\Eloquent\Model;
+use Laravel\Scout\Searchable;
 
 class Thread extends Model
 {
-    use RecordActivity;
+    use RecordActivity , Searchable;
 
     protected $table = 'threads';
 
@@ -151,4 +150,11 @@ class Thread extends Model
 
         $this->save();
     }
+
+    public function toSearchableArray()
+    {
+        return $this->toArray() + ['path' => $this->path()];
+    }
+
+
 }
