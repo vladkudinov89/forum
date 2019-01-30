@@ -54,6 +54,7 @@ Vue.component('user-notifications-component', require('./components/UserNotifica
 Vue.component('favorite-component', require('./components/FavoriteComponent.vue').default);
 Vue.component('paginator-component', require('./components/PaginatorComponent.vue').default);
 Vue.component('avatar-component', require('./components/AvatarComponent.vue').default);
+Vue.component('wysiwyg-component', require('./components/WysiwygComponent.vue').default);
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to

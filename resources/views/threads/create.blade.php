@@ -35,8 +35,9 @@
 
                             <div class="form-group">
                                 <label for="body">Body:</label>
-                                <textarea class="form-control" required name="body" id="body"
-                                          rows="8">{{old('body')}}</textarea>
+                                {{-- <textarea class="form-control" required name="body" id="body"
+                                          rows="8">{{old('body')}}</textarea> --}}
+                                          <wysiwyg-component name="body"></wysiwyg-component>
                                 @if($errors->has('body'))
                                     <div class="alert alert-danger">{{$errors->first('body')}}</div>
                                 @endif
